@@ -1,0 +1,148 @@
+import { api } from "encore.dev/api";
+import { secret } from "encore.dev/config";
+import type { AIAnalysisResult } from "../nutrition/types";
+
+const geminiApiKey = secret("GeminiApiKey");
+
+interface AnalyzeFoodImageRequest {
+  imageBase64: string;
+}
+
+interface AnalyzeFoodImageResponse {
+  analysis: AIAnalysisResult;
+}
+
+// Analyzes a food image using AI to identify nutritional content.
+export const analyzeFoodImage = api<AnalyzeFoodImageRequest, AnalyzeFoodImageResponse>(
+  { expose: true, method: "POST", path: "/analyze-image" },
+  async (req) => {
+    const prompt = `
+Analyze this food image and provide a detailed nutritional analysis. Return your response as a JSON object with the following structure:
+
+{
+  "detectedFoods": [
+    {
+      "name": "food name",
+      "confidence": 0.95,
+      "estimatedWeight": 150,
+      "nutrition": {
+        "calories": 200,
+        "protein": 20,
+        "carbs": 30,
+        "fat": 5
+      }
+    }
+  ],
+  "totalNutrition": {
+    "calories": 200,
+    "protein": 20,
+    "carbs": 30,
+    "fat": 5
+  },
+  "suggestions": [
+    "Add some vegetables for more fiber",
+    "Consider a smaller portion size"
+  ]
+}
+
+Please estimate the weight of each food item in grams and calculate nutritional values accordingly. Provide practical suggestions for improving the meal's nutritional balance.
+`;
+
+    try {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey()}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [
+              { text: prompt },
+              {
+                inline_data: {
+                  mime_type: "image/jpeg",
+                  data: req.imageBase64
+                }
+              }
+            ]
+          }]
+        })
+      });
+
+      const result = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(`Gemini API error: ${result.error?.message || 'Unknown error'}`);
+      }
+
+      const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!text) {
+        throw new Error('No response from Gemini API');
+      }
+
+      // Extract JSON from the response
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) {
+        // Fallback response if JSON parsing fails
+        const analysis: AIAnalysisResult = {
+          detectedFoods: [
+            {
+              name: "Mixed Food Items",
+              confidence: 0.7,
+              estimatedWeight: 200,
+              nutrition: {
+                calories: 300,
+                protein: 15,
+                carbs: 40,
+                fat: 10
+              }
+            }
+          ],
+          totalNutrition: {
+            calories: 300,
+            protein: 15,
+            carbs: 40,
+            fat: 10
+          },
+          suggestions: [
+            "Unable to provide detailed analysis. Consider logging individual food items manually.",
+            "Try to include more variety in your meals."
+          ]
+        };
+        return { analysis };
+      }
+
+      const analysis = JSON.parse(jsonMatch[0]) as AIAnalysisResult;
+      return { analysis };
+
+    } catch (error) {
+      // Fallback response in case of API errors
+      const analysis: AIAnalysisResult = {
+        detectedFoods: [
+          {
+            name: "Food Item",
+            confidence: 0.5,
+            estimatedWeight: 150,
+            nutrition: {
+              calories: 250,
+              protein: 12,
+              carbs: 35,
+              fat: 8
+            }
+          }
+        ],
+        totalNutrition: {
+          calories: 250,
+          protein: 12,
+          carbs: 35,
+          fat: 8
+        },
+        suggestions: [
+          "Image analysis temporarily unavailable. Please try again later.",
+          "Consider logging your food manually for accurate tracking."
+        ]
+      };
+      return { analysis };
+    }
+  }
+);
