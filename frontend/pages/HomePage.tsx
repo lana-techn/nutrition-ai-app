@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Camera, Target, BookOpen, MessageCircle, Sparkles, Heart, Brain, CheckCircle, Star, ArrowRight, Zap, Shield, TrendingUp, Users, Award, Clock } from 'lucide-react';
+import { Camera, Target, BookOpen, MessageCircle, Sparkles, Heart, Brain, CheckCircle, Star, ArrowRight, Zap, Shield, TrendingUp, Users, Award, Clock, ChefHat, BarChart3, Lightbulb, Clock3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -95,7 +95,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Features Section with enhanced animations */}
+      {/* Features Section with Bento Grid */}
       <section className="py-32 relative">
         <div className="container mx-auto px-4">
           <div className="text-center mb-20">
@@ -115,94 +115,216 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
-            <Card className="group relative overflow-hidden border-0 shadow-2xl hover:shadow-emerald-500/25 transition-all duration-700 transform hover:-translate-y-4 hover:rotate-1 bg-gradient-to-br from-emerald-50 to-teal-100">
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/0 to-emerald-600/5 group-hover:from-emerald-600/10 group-hover:to-emerald-600/20 transition-all duration-700"></div>
-              <div className="absolute top-4 right-4 w-24 h-24 bg-gradient-to-br from-emerald-400/20 to-teal-400/20 rounded-full blur-xl group-hover:scale-150 transition-all duration-700"></div>
-              <CardHeader className="text-center pb-6 relative z-10">
-                <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-3xl flex items-center justify-center shadow-2xl group-hover:scale-125 group-hover:rotate-12 transition-all duration-500">
-                  <Camera className="h-10 w-10 text-white" />
-                </div>
-                <CardTitle className="text-2xl font-bold text-slate-900 group-hover:text-emerald-700 transition-colors duration-300">AI Food Analysis</CardTitle>
-              </CardHeader>
-              <CardContent className="text-center relative z-10 pb-8">
-                <CardDescription className="text-slate-600 leading-relaxed text-lg mb-6">
-                  Snap a photo of your meal and get instant nutritional analysis powered by advanced AI technology.
-                </CardDescription>
-                <div className="flex justify-center">
-                  <Badge variant="secondary" className="bg-emerald-100 text-emerald-700 border border-emerald-200 px-4 py-2 font-medium">
-                    <Star className="h-4 w-4 mr-2" />
-                    Instant Results
-                  </Badge>
-                </div>
-              </CardContent>
-            </Card>
+          {/* Bento Grid Layout */}
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 h-auto">
+              
+              {/* Large Feature Card - AI Food Analysis */}
+              <Card className="group relative overflow-hidden border-0 shadow-2xl hover:shadow-emerald-500/30 transition-all duration-700 transform hover:-translate-y-3 col-span-1 md:col-span-2 lg:col-span-2 row-span-2 bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/5 to-cyan-600/10 group-hover:from-emerald-600/15 group-hover:to-cyan-600/20 transition-all duration-700"></div>
+                <div className="absolute top-6 right-6 w-32 h-32 bg-gradient-to-br from-emerald-400/20 to-cyan-400/20 rounded-full blur-2xl group-hover:scale-150 transition-all duration-700"></div>
+                <div className="absolute bottom-6 left-6 w-24 h-24 bg-gradient-to-br from-teal-400/15 to-emerald-400/15 rounded-full blur-xl group-hover:scale-125 transition-all duration-700"></div>
+                
+                <CardContent className="relative z-10 p-8 h-full flex flex-col">
+                  <div className="flex items-start justify-between mb-6">
+                    <div className="w-16 h-16 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-2xl flex items-center justify-center shadow-xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-500">
+                      <Camera className="h-8 w-8 text-white" />
+                    </div>
+                    <Badge className="bg-emerald-100 text-emerald-700 border border-emerald-200">
+                      <Star className="h-3 w-3 mr-1" />
+                      Most Popular
+                    </Badge>
+                  </div>
+                  
+                  <div className="flex-1">
+                    <h3 className="text-3xl font-bold text-slate-900 mb-4 group-hover:text-emerald-700 transition-colors duration-300">
+                      AI Food Analysis
+                    </h3>
+                    <p className="text-slate-600 text-lg leading-relaxed mb-6">
+                      Revolutionary AI-powered food recognition that instantly analyzes your meals. Simply snap a photo and get comprehensive nutritional breakdowns with 98% accuracy in under 2 seconds.
+                    </p>
+                    
+                    <div className="grid grid-cols-2 gap-4 mb-6">
+                      <div className="text-center p-3 bg-white/60 rounded-xl border border-emerald-200/50">
+                        <div className="text-2xl font-bold text-emerald-600">50K+</div>
+                        <div className="text-xs text-slate-600">Foods Recognized</div>
+                      </div>
+                      <div className="text-center p-3 bg-white/60 rounded-xl border border-emerald-200/50">
+                        <div className="text-2xl font-bold text-emerald-600">&lt;2s</div>
+                        <div className="text-xs text-slate-600">Analysis Time</div>
+                      </div>
+                    </div>
+                  </div>
 
-            <Card className="group relative overflow-hidden border-0 shadow-2xl hover:shadow-blue-500/25 transition-all duration-700 transform hover:-translate-y-4 hover:-rotate-1 bg-gradient-to-br from-blue-50 to-cyan-100">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-600/0 to-blue-600/5 group-hover:from-blue-600/10 group-hover:to-blue-600/20 transition-all duration-700"></div>
-              <div className="absolute top-4 right-4 w-24 h-24 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-full blur-xl group-hover:scale-150 transition-all duration-700"></div>
-              <CardHeader className="text-center pb-6 relative z-10">
-                <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-3xl flex items-center justify-center shadow-2xl group-hover:scale-125 group-hover:rotate-12 transition-all duration-500">
-                  <Target className="h-10 w-10 text-white" />
-                </div>
-                <CardTitle className="text-2xl font-bold text-slate-900 group-hover:text-blue-700 transition-colors duration-300">Age-Specific Plans</CardTitle>
-              </CardHeader>
-              <CardContent className="text-center relative z-10 pb-8">
-                <CardDescription className="text-slate-600 leading-relaxed text-lg mb-6">
-                  Receive personalized nutrition advice tailored to your age, lifestyle, and health goals.
-                </CardDescription>
-                <div className="flex justify-center">
-                  <Badge variant="secondary" className="bg-blue-100 text-blue-700 border border-blue-200 px-4 py-2 font-medium">
-                    <TrendingUp className="h-4 w-4 mr-2" />
+                  <Button 
+                    asChild 
+                    className="w-full bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-700 hover:to-cyan-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-105"
+                  >
+                    <Link to="/analyze" className="flex items-center justify-center space-x-2">
+                      <span>Try Now</span>
+                      <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Age-Specific Plans */}
+              <Card className="group relative overflow-hidden border-0 shadow-xl hover:shadow-blue-500/25 transition-all duration-500 transform hover:-translate-y-2 bg-gradient-to-br from-blue-50 to-indigo-100">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-indigo-600/10 group-hover:from-blue-600/15 group-hover:to-indigo-600/20 transition-all duration-500"></div>
+                <div className="absolute top-4 right-4 w-20 h-20 bg-gradient-to-br from-blue-400/20 to-indigo-400/20 rounded-full blur-xl group-hover:scale-125 transition-all duration-500"></div>
+                
+                <CardContent className="relative z-10 p-6">
+                  <div className="w-14 h-14 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center shadow-lg mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <Target className="h-7 w-7 text-white" />
+                  </div>
+                  
+                  <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-700 transition-colors duration-300">
+                    Age-Specific Plans
+                  </h3>
+                  <p className="text-slate-600 text-sm leading-relaxed mb-4">
+                    Personalized nutrition advice tailored to your life stage and health goals.
+                  </p>
+                  
+                  <Badge className="bg-blue-100 text-blue-700 border border-blue-200">
+                    <TrendingUp className="h-3 w-3 mr-1" />
                     Personalized
                   </Badge>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
 
-            <Card className="group relative overflow-hidden border-0 shadow-2xl hover:shadow-violet-500/25 transition-all duration-700 transform hover:-translate-y-4 hover:rotate-1 bg-gradient-to-br from-violet-50 to-purple-100">
-              <div className="absolute inset-0 bg-gradient-to-br from-violet-600/0 to-violet-600/5 group-hover:from-violet-600/10 group-hover:to-violet-600/20 transition-all duration-700"></div>
-              <div className="absolute top-4 right-4 w-24 h-24 bg-gradient-to-br from-violet-400/20 to-purple-400/20 rounded-full blur-xl group-hover:scale-150 transition-all duration-700"></div>
-              <CardHeader className="text-center pb-6 relative z-10">
-                <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-r from-violet-500 to-purple-500 rounded-3xl flex items-center justify-center shadow-2xl group-hover:scale-125 group-hover:rotate-12 transition-all duration-500">
-                  <BookOpen className="h-10 w-10 text-white" />
-                </div>
-                <CardTitle className="text-2xl font-bold text-slate-900 group-hover:text-violet-700 transition-colors duration-300">Expert Content</CardTitle>
-              </CardHeader>
-              <CardContent className="text-center relative z-10 pb-8">
-                <CardDescription className="text-slate-600 leading-relaxed text-lg mb-6">
-                  Learn from our library of evidence-based articles written by nutrition professionals.
-                </CardDescription>
-                <div className="flex justify-center">
-                  <Badge variant="secondary" className="bg-violet-100 text-violet-700 border border-violet-200 px-4 py-2 font-medium">
-                    <Shield className="h-4 w-4 mr-2" />
+              {/* Expert Content */}
+              <Card className="group relative overflow-hidden border-0 shadow-xl hover:shadow-violet-500/25 transition-all duration-500 transform hover:-translate-y-2 bg-gradient-to-br from-violet-50 to-purple-100">
+                <div className="absolute inset-0 bg-gradient-to-br from-violet-600/5 to-purple-600/10 group-hover:from-violet-600/15 group-hover:to-purple-600/20 transition-all duration-500"></div>
+                <div className="absolute top-4 right-4 w-20 h-20 bg-gradient-to-br from-violet-400/20 to-purple-400/20 rounded-full blur-xl group-hover:scale-125 transition-all duration-500"></div>
+                
+                <CardContent className="relative z-10 p-6">
+                  <div className="w-14 h-14 bg-gradient-to-r from-violet-500 to-purple-500 rounded-xl flex items-center justify-center shadow-lg mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <BookOpen className="h-7 w-7 text-white" />
+                  </div>
+                  
+                  <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-violet-700 transition-colors duration-300">
+                    Expert Content
+                  </h3>
+                  <p className="text-slate-600 text-sm leading-relaxed mb-4">
+                    Evidence-based articles written by certified nutrition professionals.
+                  </p>
+                  
+                  <Badge className="bg-violet-100 text-violet-700 border border-violet-200">
+                    <Shield className="h-3 w-3 mr-1" />
                     Science-Based
                   </Badge>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
 
-            <Card className="group relative overflow-hidden border-0 shadow-2xl hover:shadow-orange-500/25 transition-all duration-700 transform hover:-translate-y-4 hover:-rotate-1 bg-gradient-to-br from-orange-50 to-amber-100">
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-600/0 to-orange-600/5 group-hover:from-orange-600/10 group-hover:to-orange-600/20 transition-all duration-700"></div>
-              <div className="absolute top-4 right-4 w-24 h-24 bg-gradient-to-br from-orange-400/20 to-amber-400/20 rounded-full blur-xl group-hover:scale-150 transition-all duration-700"></div>
-              <CardHeader className="text-center pb-6 relative z-10">
-                <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-r from-orange-500 to-amber-500 rounded-3xl flex items-center justify-center shadow-2xl group-hover:scale-125 group-hover:rotate-12 transition-all duration-500">
-                  <MessageCircle className="h-10 w-10 text-white" />
-                </div>
-                <CardTitle className="text-2xl font-bold text-slate-900 group-hover:text-orange-700 transition-colors duration-300">AI Nutrition Coach</CardTitle>
-              </CardHeader>
-              <CardContent className="text-center relative z-10 pb-8">
-                <CardDescription className="text-slate-600 leading-relaxed text-lg mb-6">
-                  Chat with our AI nutritionist for instant answers to your dietary questions and concerns.
-                </CardDescription>
-                <div className="flex justify-center">
-                  <Badge variant="secondary" className="bg-orange-100 text-orange-700 border border-orange-200 px-4 py-2 font-medium">
-                    <Sparkles className="h-4 w-4 mr-2" />
-                    24/7 Available
+              {/* AI Chat Assistant - Tall Card */}
+              <Card className="group relative overflow-hidden border-0 shadow-xl hover:shadow-orange-500/25 transition-all duration-500 transform hover:-translate-y-2 row-span-2 bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50">
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-600/5 to-yellow-600/10 group-hover:from-orange-600/15 group-hover:to-yellow-600/20 transition-all duration-500"></div>
+                <div className="absolute top-6 right-6 w-24 h-24 bg-gradient-to-br from-orange-400/20 to-yellow-400/20 rounded-full blur-xl group-hover:scale-125 transition-all duration-500"></div>
+                <div className="absolute bottom-6 left-6 w-16 h-16 bg-gradient-to-br from-amber-400/15 to-orange-400/15 rounded-full blur-lg group-hover:scale-110 transition-all duration-500"></div>
+                
+                <CardContent className="relative z-10 p-6 h-full flex flex-col">
+                  <div className="w-14 h-14 bg-gradient-to-r from-orange-500 to-amber-500 rounded-xl flex items-center justify-center shadow-lg mb-6 group-hover:scale-110 transition-transform duration-300">
+                    <MessageCircle className="h-7 w-7 text-white" />
+                  </div>
+                  
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-orange-700 transition-colors duration-300">
+                      AI Nutrition Coach
+                    </h3>
+                    <p className="text-slate-600 text-sm leading-relaxed mb-6">
+                      Chat with our intelligent nutrition assistant for instant answers to your dietary questions and personalized guidance.
+                    </p>
+                    
+                    <div className="space-y-3 mb-6">
+                      <div className="flex items-center space-x-2 text-sm text-slate-600">
+                        <CheckCircle className="h-4 w-4 text-orange-500" />
+                        <span>24/7 Availability</span>
+                      </div>
+                      <div className="flex items-center space-x-2 text-sm text-slate-600">
+                        <CheckCircle className="h-4 w-4 text-orange-500" />
+                        <span>Instant Responses</span>
+                      </div>
+                      <div className="flex items-center space-x-2 text-sm text-slate-600">
+                        <CheckCircle className="h-4 w-4 text-orange-500" />
+                        <span>Evidence-Based</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <Badge className="self-start bg-orange-100 text-orange-700 border border-orange-200">
+                    <Sparkles className="h-3 w-3 mr-1" />
+                    AI Powered
                   </Badge>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+
+              {/* Quick Stats Card */}
+              <Card className="group relative overflow-hidden border-0 shadow-xl hover:shadow-green-500/25 transition-all duration-500 transform hover:-translate-y-2 bg-gradient-to-br from-green-50 to-emerald-100">
+                <div className="absolute inset-0 bg-gradient-to-br from-green-600/5 to-emerald-600/10 group-hover:from-green-600/15 group-hover:to-emerald-600/20 transition-all duration-500"></div>
+                
+                <CardContent className="relative z-10 p-6">
+                  <div className="w-14 h-14 bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl flex items-center justify-center shadow-lg mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <BarChart3 className="h-7 w-7 text-white" />
+                  </div>
+                  
+                  <h3 className="text-xl font-bold text-slate-900 mb-3">
+                    Real-Time Analytics
+                  </h3>
+                  <p className="text-slate-600 text-sm leading-relaxed">
+                    Track your nutrition progress with detailed analytics and insights.
+                  </p>
+                </CardContent>
+              </Card>
+
+              {/* Meal Planning Card */}
+              <Card className="group relative overflow-hidden border-0 shadow-xl hover:shadow-pink-500/25 transition-all duration-500 transform hover:-translate-y-2 bg-gradient-to-br from-pink-50 to-rose-100">
+                <div className="absolute inset-0 bg-gradient-to-br from-pink-600/5 to-rose-600/10 group-hover:from-pink-600/15 group-hover:to-rose-600/20 transition-all duration-500"></div>
+                
+                <CardContent className="relative z-10 p-6">
+                  <div className="w-14 h-14 bg-gradient-to-r from-pink-500 to-rose-500 rounded-xl flex items-center justify-center shadow-lg mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <ChefHat className="h-7 w-7 text-white" />
+                  </div>
+                  
+                  <h3 className="text-xl font-bold text-slate-900 mb-3">
+                    Smart Meal Plans
+                  </h3>
+                  <p className="text-slate-600 text-sm leading-relaxed">
+                    AI-generated meal plans based on your preferences and goals.
+                  </p>
+                </CardContent>
+              </Card>
+
+              {/* Insights & Tips - Wide Card */}
+              <Card className="group relative overflow-hidden border-0 shadow-xl hover:shadow-indigo-500/25 transition-all duration-500 transform hover:-translate-y-2 col-span-1 md:col-span-2 bg-gradient-to-br from-indigo-50 via-blue-50 to-cyan-50">
+                <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/5 to-cyan-600/10 group-hover:from-indigo-600/15 group-hover:to-cyan-600/20 transition-all duration-500"></div>
+                <div className="absolute top-4 right-4 w-24 h-24 bg-gradient-to-br from-indigo-400/20 to-cyan-400/20 rounded-full blur-xl group-hover:scale-125 transition-all duration-500"></div>
+                
+                <CardContent className="relative z-10 p-6">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <div className="w-14 h-14 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <Lightbulb className="h-7 w-7 text-white" />
+                      </div>
+                      
+                      <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-indigo-700 transition-colors duration-300">
+                        Smart Insights & Tips
+                      </h3>
+                      <p className="text-slate-600 text-sm leading-relaxed">
+                        Get personalized nutrition insights and actionable tips to improve your health journey.
+                      </p>
+                    </div>
+                    
+                    <div className="flex space-x-2">
+                      <Badge className="bg-indigo-100 text-indigo-700 border border-indigo-200 text-xs">
+                        <Clock3 className="h-3 w-3 mr-1" />
+                        Daily Tips
+                      </Badge>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+            </div>
           </div>
         </div>
       </section>
