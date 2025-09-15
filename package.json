@@ -1,10 +1,15 @@
 {
   "name": "leap-app",
   "version": "1.0.0",
+  "private": true,
   "type": "module",
-  "packageManager": "bun",
-  "workspaces": [
-    "backend",
-    "frontend"
-  ]
+    "scripts": {
+    "dev": "concurrently \"pnpm dev:backend\" \"pnpm dev:frontend\"",
+    "dev:backend": "pnpm --filter backend dev",
+    "dev:frontend": "pnpm --filter frontend dev"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "packageManager": "pnpm"
 }
