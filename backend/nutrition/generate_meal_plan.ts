@@ -1,4 +1,4 @@
-import { api } from "encore.dev/api";
+import { api, APIError } from "encore.dev/api";
 import { nutritionDB } from "./db";
 import type { MealPlanRequest, MealPlanGeneration, MealPlan, MealPlanEntry, Recipe } from "./types";
 
@@ -6,6 +6,19 @@ import type { MealPlanRequest, MealPlanGeneration, MealPlan, MealPlanEntry, Reci
 export const generateMealPlan = api<MealPlanRequest, MealPlanGeneration>(
   { expose: true, method: "POST", path: "/meal-plans/generate" },
   async (req) => {
+    // Validate required fields
+    if (!req.targetCalories || req.targetCalories <= 0) {
+      throw APIError.invalidArgument("Target calories must be a positive number");
+    }
+
+    if (!req.startDate) {
+      throw APIError.invalidArgument("Start date is required");
+    }
+
+    if (!req.daysCount || req.daysCount <= 0 || req.daysCount > 30) {
+      throw APIError.invalidArgument("Days count must be between 1 and 30");
+    }
+
     // Build recipe filter conditions
     let whereConditions: string[] = [];
     let params: any[] = [];
@@ -72,7 +85,7 @@ export const generateMealPlan = api<MealPlanRequest, MealPlanGeneration>(
     }>(recipesQuery, ...params);
 
     if (recipeRows.length === 0) {
-      throw new Error("No recipes found matching the criteria");
+      throw APIError.notFound("No recipes found matching the criteria. Please adjust your preferences and try again.");
     }
 
     // Convert to Recipe objects
@@ -146,14 +159,14 @@ async function generateOptimalMealPlan(
   `;
 
   if (!mealPlanRow) {
-    throw new Error("Failed to create meal plan");
+    throw APIError.internal("Failed to create meal plan");
   }
 
   const mealPlanId = mealPlanRow.id;
 
   // Generate meals for each day
   const meals: MealPlanEntry[] = [];
-  const mealTypes: Array<'breakfast' | 'lunch' | 'dinner' | 'snack'> = ['breakfast', 'lunch', 'dinner'];
+  const mealTypes: Array<'breakfast' | 'lunch' | 'dinner'> = ['breakfast', 'lunch', 'dinner'];
   
   // Target calories per meal type
   const calorieDistribution = {
@@ -244,6 +257,16 @@ function calculateNutritionSummary(mealPlan: MealPlan) {
   const totals = Array.from(dailyTotals.values());
   const daysCount = totals.length;
 
+  if (daysCount === 0) {
+    return {
+      averageCalories: 0,
+      averageProtein: 0,
+      averageCarbs: 0,
+      averageFat: 0,
+      varietyScore: 0,
+    };
+  }
+
   const averageCalories = totals.reduce((sum, day) => sum + day.calories, 0) / daysCount;
   const averageProtein = totals.reduce((sum, day) => sum + day.protein, 0) / daysCount;
   const averageCarbs = totals.reduce((sum, day) => sum + day.carbs, 0) / daysCount;
@@ -251,7 +274,7 @@ function calculateNutritionSummary(mealPlan: MealPlan) {
 
   // Calculate variety score (unique recipes / total meals)
   const uniqueRecipes = new Set(mealPlan.meals.map(meal => meal.recipeId));
-  const varietyScore = (uniqueRecipes.size / mealPlan.meals.length) * 100;
+  const varietyScore = mealPlan.meals.length > 0 ? (uniqueRecipes.size / mealPlan.meals.length) * 100 : 0;
 
   return {
     averageCalories: Math.round(averageCalories),

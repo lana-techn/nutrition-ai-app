@@ -1,15 +1,16 @@
 import { api } from "encore.dev/api";
+import { Query } from "encore.dev/api";
 import { nutritionDB } from "./db";
 import type { Recipe, RecipeIngredient, RecipeNutrition } from "./types";
 
 interface ListRecipesRequest {
-  search?: string;
-  cuisine?: string;
-  difficulty?: string;
-  dietaryTags?: string[];
-  maxPrepTime?: number;
-  limit?: number;
-  offset?: number;
+  search?: Query<string>;
+  cuisine?: Query<string>;
+  difficulty?: Query<string>;
+  dietaryTags?: Query<string[]>;
+  maxPrepTime?: Query<number>;
+  limit?: Query<number>;
+  offset?: Query<number>;
 }
 
 interface ListRecipesResponse {
