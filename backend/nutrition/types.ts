@@ -84,3 +84,94 @@ export interface AIAnalysisResult {
   };
   suggestions: string[];
 }
+
+export interface Recipe {
+  id: number;
+  name: string;
+  description: string;
+  prepTime: number;
+  cookTime: number;
+  servings: number;
+  difficulty: 'easy' | 'medium' | 'hard';
+  cuisine: string;
+  dietaryTags: string[];
+  ingredients: RecipeIngredient[];
+  instructions: string[];
+  nutrition: RecipeNutrition;
+  imageUrl?: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface RecipeIngredient {
+  id: number;
+  recipeId: number;
+  foodItemId: number;
+  quantity: number;
+  unit: string;
+  notes?: string;
+  foodItem?: FoodItem;
+}
+
+export interface RecipeNutrition {
+  calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+  fiber: number;
+  sugar: number;
+  sodium: number;
+}
+
+export interface MealPlan {
+  id: number;
+  name: string;
+  startDate: Date;
+  endDate: Date;
+  targetCalories: number;
+  targetProtein: number;
+  targetCarbs: number;
+  targetFat: number;
+  dietaryRestrictions: string[];
+  preferences: string[];
+  meals: MealPlanEntry[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface MealPlanEntry {
+  id: number;
+  mealPlanId: number;
+  date: Date;
+  mealType: 'breakfast' | 'lunch' | 'dinner' | 'snack';
+  recipeId: number;
+  servings: number;
+  recipe?: Recipe;
+}
+
+export interface MealPlanRequest {
+  targetCalories: number;
+  targetProtein?: number;
+  targetCarbs?: number;
+  targetFat?: number;
+  dietaryRestrictions?: string[];
+  preferences?: string[];
+  excludeIngredients?: string[];
+  cuisinePreferences?: string[];
+  difficulty?: 'easy' | 'medium' | 'hard';
+  prepTimeLimit?: number;
+  startDate: Date;
+  daysCount: number;
+}
+
+export interface MealPlanGeneration {
+  mealPlan: MealPlan;
+  nutritionSummary: {
+    averageCalories: number;
+    averageProtein: number;
+    averageCarbs: number;
+    averageFat: number;
+    varietyScore: number;
+  };
+  suggestions: string[];
+}

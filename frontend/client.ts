@@ -121,10 +121,14 @@ export namespace ai {
 /**
  * Import the endpoint handlers to derive the types for the client.
  */
+import { generateMealPlan as api_nutrition_generate_meal_plan_generateMealPlan } from "~backend/nutrition/generate_meal_plan";
 import { getBlogPost as api_nutrition_get_blog_post_getBlogPost } from "~backend/nutrition/get_blog_post";
+import { getMealPlan as api_nutrition_get_meal_plan_getMealPlan } from "~backend/nutrition/get_meal_plan";
+import { getRecipe as api_nutrition_get_recipe_getRecipe } from "~backend/nutrition/get_recipe";
 import { getRecommendations as api_nutrition_get_recommendations_getRecommendations } from "~backend/nutrition/get_recommendations";
 import { listBlogPosts as api_nutrition_list_blog_posts_listBlogPosts } from "~backend/nutrition/list_blog_posts";
 import { listFoods as api_nutrition_list_foods_listFoods } from "~backend/nutrition/list_foods";
+import { listRecipes as api_nutrition_list_recipes_listRecipes } from "~backend/nutrition/list_recipes";
 
 export namespace nutrition {
 
@@ -133,10 +137,23 @@ export namespace nutrition {
 
         constructor(baseClient: BaseClient) {
             this.baseClient = baseClient
+            this.generateMealPlan = this.generateMealPlan.bind(this)
             this.getBlogPost = this.getBlogPost.bind(this)
+            this.getMealPlan = this.getMealPlan.bind(this)
+            this.getRecipe = this.getRecipe.bind(this)
             this.getRecommendations = this.getRecommendations.bind(this)
             this.listBlogPosts = this.listBlogPosts.bind(this)
             this.listFoods = this.listFoods.bind(this)
+            this.listRecipes = this.listRecipes.bind(this)
+        }
+
+        /**
+         * Generates a personalized weekly meal plan based on user preferences and nutrition goals.
+         */
+        public async generateMealPlan(params: RequestType<typeof api_nutrition_generate_meal_plan_generateMealPlan>): Promise<ResponseType<typeof api_nutrition_generate_meal_plan_generateMealPlan>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/meal-plans/generate`, {method: "POST", body: JSON.stringify(params)})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_nutrition_generate_meal_plan_generateMealPlan>
         }
 
         /**
@@ -146,6 +163,24 @@ export namespace nutrition {
             // Now make the actual call to the API
             const resp = await this.baseClient.callTypedAPI(`/blog/${encodeURIComponent(params.id)}`, {method: "GET", body: undefined})
             return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_nutrition_get_blog_post_getBlogPost>
+        }
+
+        /**
+         * Retrieves a specific meal plan with all meals and recipe details.
+         */
+        public async getMealPlan(params: { id: number }): Promise<ResponseType<typeof api_nutrition_get_meal_plan_getMealPlan>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/meal-plans/${encodeURIComponent(params.id)}`, {method: "GET", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_nutrition_get_meal_plan_getMealPlan>
+        }
+
+        /**
+         * Retrieves a specific recipe with full details including ingredients.
+         */
+        public async getRecipe(params: { id: number }): Promise<ResponseType<typeof api_nutrition_get_recipe_getRecipe>> {
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/recipes/${encodeURIComponent(params.id)}`, {method: "GET", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_nutrition_get_recipe_getRecipe>
         }
 
         /**
@@ -173,6 +208,26 @@ export namespace nutrition {
             // Now make the actual call to the API
             const resp = await this.baseClient.callTypedAPI(`/foods`, {method: "GET", body: undefined})
             return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_nutrition_list_foods_listFoods>
+        }
+
+        /**
+         * Retrieves recipes with optional filtering and pagination.
+         */
+        public async listRecipes(params: RequestType<typeof api_nutrition_list_recipes_listRecipes>): Promise<ResponseType<typeof api_nutrition_list_recipes_listRecipes>> {
+            // Convert our params into the objects we need for the request
+            const query = makeRecord<string, string | string[]>({
+                cuisine:     params.cuisine,
+                dietaryTags: params.dietaryTags?.map((v) => v),
+                difficulty:  params.difficulty,
+                limit:       params.limit === undefined ? undefined : String(params.limit),
+                maxPrepTime: params.maxPrepTime === undefined ? undefined : String(params.maxPrepTime),
+                offset:      params.offset === undefined ? undefined : String(params.offset),
+                search:      params.search,
+            })
+
+            // Now make the actual call to the API
+            const resp = await this.baseClient.callTypedAPI(`/recipes`, {query, method: "GET", body: undefined})
+            return JSON.parse(await resp.text(), dateReviver) as ResponseType<typeof api_nutrition_list_recipes_listRecipes>
         }
     }
 }

@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Apple, Camera, BookOpen, MessageCircle, Target } from 'lucide-react';
+import { Apple, Camera, BookOpen, MessageCircle, Target, ChefHat } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function Navbar() {
@@ -42,6 +42,26 @@ export default function Navbar() {
               <Link to="/recommendations" className="flex items-center space-x-1">
                 <Target className="h-4 w-4" />
                 <span>Recommendations</span>
+              </Link>
+            </Button>
+            <Button
+              variant={isActive('/meal-planner') ? 'default' : 'ghost'}
+              size="sm"
+              asChild
+            >
+              <Link to="/meal-planner" className="flex items-center space-x-1">
+                <ChefHat className="h-4 w-4" />
+                <span>Meal Planner</span>
+              </Link>
+            </Button>
+            <Button
+              variant={isActive('/recipes') ? 'default' : 'ghost'}
+              size="sm"
+              asChild
+            >
+              <Link to="/recipes" className="flex items-center space-x-1">
+                <BookOpen className="h-4 w-4" />
+                <span>Recipes</span>
               </Link>
             </Button>
             <Button
