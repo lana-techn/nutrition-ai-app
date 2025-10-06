@@ -1,0 +1,100 @@
+import { NextRequest, NextResponse } from 'next/server';
+import type { NutritionRecommendation } from '@/lib/types';
+
+export async function POST(req: NextRequest) {
+  try {
+    const { age, weight = 70, height = 170, activityLevel = "moderate", gender = "male" } = await req.json();
+
+    if (!age) {
+      return NextResponse.json({ error: 'Age is required' }, { status: 400 });
+    }
+
+    // Calculate BMR using Mifflin-St Jeor Equation
+    let bmr: number;
+    if (gender === "male") {
+      bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+    } else {
+      bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+    }
+
+    // Activity multipliers
+    const activityMultipliers: Record<string, number> = {
+      sedentary: 1.2,
+      light: 1.375,
+      moderate: 1.55,
+      active: 1.725,
+      very_active: 1.9
+    };
+
+    const multiplier = activityMultipliers[activityLevel] || 1.55;
+    const calories = Math.round(bmr * multiplier);
+
+    // Macronutrient ratios (general guidelines)
+    const protein = Math.round((calories * 0.15) / 4); // 15% of calories, 4 cal/g
+    const fat = Math.round((calories * 0.25) / 9); // 25% of calories, 9 cal/g
+    const carbs = Math.round((calories * 0.60) / 4); // 60% of calories, 4 cal/g
+    const fiber = Math.round(age < 50 ? (gender === "male" ? 38 : 25) : (gender === "male" ? 30 : 21));
+
+    // Age-specific recommendations
+    let ageGroup: string;
+    let notes: string[] = [];
+
+    if (age < 13) {
+      ageGroup = "Children (2-12 years)";
+      notes = [
+        "Focus on calcium and vitamin D for bone development",
+        "Ensure adequate protein for growth",
+        "Limit processed foods and added sugars",
+        "Encourage variety in fruits and vegetables"
+      ];
+    } else if (age < 19) {
+      ageGroup = "Adolescents (13-18 years)";
+      notes = [
+        "Increased caloric needs for rapid growth",
+        "Iron is crucial, especially for females",
+        "Calcium and vitamin D remain important",
+        "Establish healthy eating patterns"
+      ];
+    } else if (age < 31) {
+      ageGroup = "Young Adults (19-30 years)";
+      notes = [
+        "Focus on building healthy habits",
+        "Maintain adequate protein intake",
+        "Include omega-3 fatty acids",
+        "Stay hydrated and active"
+      ];
+    } else if (age < 51) {
+      ageGroup = "Adults (31-50 years)";
+      notes = [
+        "Monitor portion sizes as metabolism slows",
+        "Increase antioxidant-rich foods",
+        "Maintain bone health with calcium and vitamin D",
+        "Focus on heart-healthy fats"
+      ];
+    } else {
+      ageGroup = "Older Adults (51+ years)";
+      notes = [
+        "May need fewer calories but same nutrient density",
+        "Vitamin B12 and D become more important",
+        "Focus on protein to maintain muscle mass",
+        "Consider fiber for digestive health"
+      ];
+    }
+
+    const recommendation: NutritionRecommendation = {
+      calories,
+      protein,
+      carbs,
+      fat,
+      fiber,
+      ageGroup,
+      notes
+    };
+
+    return NextResponse.json({ recommendation });
+
+  } catch (error) {
+    console.error('Recommendations error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
