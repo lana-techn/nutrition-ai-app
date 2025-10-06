@@ -9,7 +9,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "db:setup": "node scripts/setup-db.js",
+    "db:schema": "psql $DATABASE_URL -f database/schema.sql",
+    "db:seed": "psql $DATABASE_URL -f database/seed.sql"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
