@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
 import Navbar from '@/components/layout/Navbar'
+import Footer from '@/components/layout/Footer'
 import { ReactQueryProvider } from '@/components/providers/ReactQueryProvider'
 
 const geistSans = Geist({
@@ -30,9 +31,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ReactQueryProvider>
-          <div className="min-h-screen bg-background">
+          <div className="min-h-screen bg-background flex flex-col">
             <Navbar />
-            <main>{children}</main>
+            <main className="flex-1">{children}</main>
+            <Footer />
           </div>
         </ReactQueryProvider>
       </body>
