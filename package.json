@@ -1,22 +1,15 @@
 {
-  "name": "leap-app",
-  "version": "1.0.0",
-  "type": "module",
-  "packageManager": "bun",
-  "workspaces": [
-    "backend",
-    "frontend"
-  ]
-}
-
   "name": "nutrition-ai-nextjs",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
+  "packageManager": "pnpm@9.15.2",
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "pnpm exec next build --turbopack",
+    "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint .",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.0.2",
