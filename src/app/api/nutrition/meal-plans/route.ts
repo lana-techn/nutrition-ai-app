@@ -112,14 +112,24 @@ export async function POST(req: NextRequest) {
   try {
     const request: MealPlanRequest = await req.json();
 
+    // Normalize and coerce dates/numbers
+    const normalizedStartDate = new Date((request as any).startDate);
+    const normalizedDaysCount = Number((request as any).daysCount || 7);
+    
+    const normalizedRequest: MealPlanRequest = {
+      ...request,
+      startDate: normalizedStartDate as any,
+      daysCount: normalizedDaysCount as any,
+    };
+
     // Generate meal plan using AI or rule-based logic
-    const mealPlanGeneration = await generateMealPlan(request);
+    const mealPlanGeneration = await generateMealPlan(normalizedRequest);
 
     // Save meal plan to database
     const [savedMealPlan] = await db.insert(mealPlans).values({
       name: `Meal Plan ${new Date().toLocaleDateString()}`,
-      startDate: request.startDate,
-      endDate: new Date(request.startDate.getTime() + (request.daysCount - 1) * 24 * 60 * 60 * 1000),
+      startDate: normalizedStartDate,
+      endDate: new Date(normalizedStartDate.getTime() + (normalizedDaysCount - 1) * 24 * 60 * 60 * 1000),
       targetCalories: request.targetCalories,
       targetProtein: request.targetProtein,
       targetCarbs: request.targetCarbs,
@@ -159,6 +169,9 @@ export async function POST(req: NextRequest) {
 
 async function generateMealPlan(request: MealPlanRequest): Promise<MealPlanGeneration> {
   try {
+    // Ensure startDate is a Date object
+    const startDate = new Date((request as any).startDate);
+
     // Get recipes that match dietary restrictions
     let recipeQuery = db.select().from(recipes);
     
@@ -200,7 +213,7 @@ async function generateMealPlan(request: MealPlanRequest): Promise<MealPlanGener
     const mealTypes = ['breakfast', 'lunch', 'dinner', 'snack'] as const;
 
     for (let day = 0; day < request.daysCount; day++) {
-      const date = new Date(request.startDate);
+      const date = new Date(startDate);
       date.setDate(date.getDate() + day);
 
       for (const mealType of mealTypes) {
@@ -272,8 +285,8 @@ async function generateMealPlan(request: MealPlanRequest): Promise<MealPlanGener
     const mealPlan: MealPlan = {
       id: 0, // Will be set after insertion
       name: `AI Generated Meal Plan`,
-      startDate: request.startDate,
-      endDate: new Date(request.startDate.getTime() + (request.daysCount - 1) * 24 * 60 * 60 * 1000),
+      startDate: startDate as any,
+      endDate: new Date(startDate.getTime() + (request.daysCount - 1) * 24 * 60 * 60 * 1000),
       targetCalories: request.targetCalories,
       targetProtein: request.targetProtein || 0,
       targetCarbs: request.targetCarbs || 0,
