@@ -21,6 +21,85 @@ const CUISINES = [
   'American', 'Thai', 'Japanese', 'Greek', 'Middle Eastern'
 ];
 
+// Mock data for testing
+const mockRecipes: Recipe[] = [
+  {
+    id: 1,
+    name: 'Mediterranean Grilled Chicken Bowl',
+    description: 'Fresh and healthy bowl with grilled chicken, quinoa, and Mediterranean vegetables',
+    prepTime: 15,
+    cookTime: 20,
+    servings: 4,
+    difficulty: 'easy',
+    cuisine: 'Mediterranean',
+    dietaryTags: ['High-Protein', 'Gluten-Free', 'Mediterranean'],
+    ingredients: [],
+    instructions: [],
+    nutrition: {
+      calories: 425,
+      protein: 35,
+      carbs: 28,
+      fat: 18,
+      fiber: 6,
+      sugar: 8,
+      sodium: 420
+    },
+    imageUrl: null,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    id: 2,
+    name: 'Vegan Buddha Bowl',
+    description: 'Colorful plant-based bowl with quinoa, roasted vegetables, and tahini dressing',
+    prepTime: 20,
+    cookTime: 25,
+    servings: 2,
+    difficulty: 'medium',
+    cuisine: 'Asian',
+    dietaryTags: ['Vegan', 'Vegetarian', 'Gluten-Free', 'High-Protein'],
+    ingredients: [],
+    instructions: [],
+    nutrition: {
+      calories: 380,
+      protein: 15,
+      carbs: 45,
+      fat: 16,
+      fiber: 12,
+      sugar: 12,
+      sodium: 280
+    },
+    imageUrl: null,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    id: 3,
+    name: 'Keto Salmon with Asparagus',
+    description: 'Pan-seared salmon with garlic butter asparagus, perfect for ketogenic diet',
+    prepTime: 10,
+    cookTime: 15,
+    servings: 2,
+    difficulty: 'easy',
+    cuisine: 'American',
+    dietaryTags: ['Keto', 'Low-Carb', 'High-Protein', 'Gluten-Free'],
+    ingredients: [],
+    instructions: [],
+    nutrition: {
+      calories: 520,
+      protein: 42,
+      carbs: 6,
+      fat: 38,
+      fiber: 3,
+      sugar: 3,
+      sodium: 320
+    },
+    imageUrl: null,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  }
+];
+
 export default function RecipesPage() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([]);
@@ -30,14 +109,6 @@ export default function RecipesPage() {
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>('');
   const [selectedDietaryTags, setSelectedDietaryTags] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);
-
-  useEffect(() => {
-    fetchRecipes();
-  }, []);
-
-  useEffect(() => {
-    filterRecipesUpdated();
-  }, [filterRecipesUpdated]);
 
   const fetchRecipes = async () => {
     try {
@@ -58,22 +129,6 @@ export default function RecipesPage() {
     } finally {
       setLoading(false);
     }
-  };
-
-
-  const toggleDietaryTag = (tag: string) => {
-    setSelectedDietaryTags(prev => 
-      prev.includes(tag) 
-        ? prev.filter(t => t !== tag)
-        : [...prev, tag]
-    );
-  };
-
-  const clearFilters = () => {
-    setSearchTerm('');
-    setSelectedCuisine('');
-    setSelectedDifficulty('');
-    setSelectedDietaryTags([]);
   };
 
   // Update filter logic to handle 'all' values
@@ -114,6 +169,30 @@ export default function RecipesPage() {
     setFilteredRecipes(filtered);
   }, [recipes, searchTerm, selectedCuisine, selectedDifficulty, selectedDietaryTags]);
 
+  const toggleDietaryTag = (tag: string) => {
+    setSelectedDietaryTags(prev => 
+      prev.includes(tag) 
+        ? prev.filter(t => t !== tag)
+        : [...prev, tag]
+    );
+  };
+
+  const clearFilters = () => {
+    setSearchTerm('');
+    setSelectedCuisine('');
+    setSelectedDifficulty('');
+    setSelectedDietaryTags([]);
+  };
+
+  // Effects
+  useEffect(() => {
+    fetchRecipes();
+  }, []);
+
+  useEffect(() => {
+    filterRecipesUpdated();
+  }, [filterRecipesUpdated]);
+
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case 'easy': return 'text-green-600 bg-green-100';
@@ -124,7 +203,7 @@ export default function RecipesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50">
+    <div className="min-h-screen">
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
@@ -138,27 +217,27 @@ export default function RecipesPage() {
               </div>
             </div>
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-4">
+          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-4">
             Healthy Recipes
           </h1>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Discover thousands of nutritious and delicious recipes designed by nutrition experts. 
             Every recipe comes with detailed nutritional information and cooking instructions.
           </p>
         </div>
 
         {/* Search and Filters */}
-        <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm mb-8">
+        <Card className="shadow-xl bg-card/80 backdrop-blur-sm mb-8">
           <CardContent className="p-6">
             <div className="space-y-6">
               {/* Search Bar */}
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                 <Input
                   placeholder="Search recipes by name or ingredient..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 pr-4 py-3 text-lg border-slate-300 focus:border-orange-500 focus:ring-orange-500"
+                  className="pl-10 pr-4 py-3 text-lg"
                 />
               </div>
 
@@ -179,7 +258,7 @@ export default function RecipesPage() {
                 </Button>
                 
                 {(selectedCuisine || selectedDifficulty || selectedDietaryTags.length > 0) && (
-                  <Button variant="ghost" onClick={clearFilters} className="text-slate-600">
+                <Button variant="ghost" onClick={clearFilters} className="text-muted-foreground">
                     Clear All
                   </Button>
                 )}
@@ -190,7 +269,7 @@ export default function RecipesPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-6 border-t border-slate-200">
                   {/* Cuisine Filter */}
                   <div className="space-y-2">
-                    <Label className="text-sm font-medium text-slate-700">Cuisine</Label>
+                    <Label className="text-sm font-medium text-foreground">Cuisine</Label>
                     <Select value={selectedCuisine} onValueChange={setSelectedCuisine}>
                       <SelectTrigger>
                         <SelectValue placeholder="All Cuisines" />
@@ -289,7 +368,7 @@ export default function RecipesPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredRecipes.map((recipe) => (
               <Link key={recipe.id} href={`/recipes/${recipe.id}`}>
-                <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer group overflow-hidden bg-white">
+                <Card className="shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer group overflow-hidden">
                   <div className="relative h-48 overflow-hidden">
                     {recipe.imageUrl ? (
                       <Image
@@ -312,15 +391,15 @@ export default function RecipesPage() {
                   
                   <CardContent className="p-6">
                     <div className="mb-3">
-                      <h3 className="font-bold text-lg text-slate-900 mb-2 group-hover:text-orange-600 transition-colors line-clamp-2">
+                      <h3 className="font-bold text-lg text-foreground mb-2 group-hover:text-orange-600 transition-colors line-clamp-2">
                         {recipe.name}
                       </h3>
-                      <p className="text-slate-600 text-sm line-clamp-2 leading-relaxed">
+                      <p className="text-muted-foreground text-sm line-clamp-2 leading-relaxed">
                         {recipe.description}
                       </p>
                     </div>
 
-                    <div className="flex items-center justify-between text-sm text-slate-500 mb-4">
+                    <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
                       <div className="flex items-center space-x-1">
                         <Clock className="h-4 w-4" />
                         <span>{recipe.prepTime + recipe.cookTime} min</span>
@@ -379,81 +458,3 @@ export default function RecipesPage() {
   );
 }
 
-// Mock data for testing
-const mockRecipes: Recipe[] = [
-  {
-    id: 1,
-    name: 'Mediterranean Grilled Chicken Bowl',
-    description: 'Fresh and healthy bowl with grilled chicken, quinoa, and Mediterranean vegetables',
-    prepTime: 15,
-    cookTime: 20,
-    servings: 4,
-    difficulty: 'easy',
-    cuisine: 'Mediterranean',
-    dietaryTags: ['High-Protein', 'Gluten-Free', 'Mediterranean'],
-    ingredients: [],
-    instructions: [],
-    nutrition: {
-      calories: 425,
-      protein: 35,
-      carbs: 28,
-      fat: 18,
-      fiber: 6,
-      sugar: 8,
-      sodium: 420
-    },
-    imageUrl: null,
-    createdAt: new Date(),
-    updatedAt: new Date()
-  },
-  {
-    id: 2,
-    name: 'Vegan Buddha Bowl',
-    description: 'Colorful plant-based bowl with quinoa, roasted vegetables, and tahini dressing',
-    prepTime: 20,
-    cookTime: 25,
-    servings: 2,
-    difficulty: 'medium',
-    cuisine: 'Asian',
-    dietaryTags: ['Vegan', 'Vegetarian', 'Gluten-Free', 'High-Protein'],
-    ingredients: [],
-    instructions: [],
-    nutrition: {
-      calories: 380,
-      protein: 15,
-      carbs: 45,
-      fat: 16,
-      fiber: 12,
-      sugar: 12,
-      sodium: 280
-    },
-    imageUrl: null,
-    createdAt: new Date(),
-    updatedAt: new Date()
-  },
-  {
-    id: 3,
-    name: 'Keto Salmon with Asparagus',
-    description: 'Pan-seared salmon with garlic butter asparagus, perfect for ketogenic diet',
-    prepTime: 10,
-    cookTime: 15,
-    servings: 2,
-    difficulty: 'easy',
-    cuisine: 'American',
-    dietaryTags: ['Keto', 'Low-Carb', 'High-Protein', 'Gluten-Free'],
-    ingredients: [],
-    instructions: [],
-    nutrition: {
-      calories: 520,
-      protein: 42,
-      carbs: 6,
-      fat: 38,
-      fiber: 3,
-      sugar: 3,
-      sodium: 320
-    },
-    imageUrl: null,
-    createdAt: new Date(),
-    updatedAt: new Date()
-  }
-];

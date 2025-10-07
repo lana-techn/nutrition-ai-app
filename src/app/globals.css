@@ -1,26 +1,219 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Background colors */
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    /* Card colors */
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    /* Popover colors */
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    /* Primary colors - Emerald/Teal gradient */
+    --primary: 158 80% 45%;
+    --primary-foreground: 210 40% 98%;
+
+    /* Secondary colors */
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+
+    /* Muted colors */
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    /* Accent colors */
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+
+    /* Destructive colors */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    /* Border colors */
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 158 80% 45%;
+
+    /* Chart colors */
+    --chart-1: 158 80% 45%;
+    --chart-2: 173 80% 40%;
+    --chart-3: 197 85% 60%;
+    --chart-4: 43 96% 56%;
+    --chart-5: 27 87% 67%;
+
+    /* Nutrition specific colors */
+    --nutrition-protein: 14 91% 57%;
+    --nutrition-carbs: 42 96% 50%;
+    --nutrition-fat: 262 83% 67%;
+    --nutrition-fiber: 122 61% 45%;
+
+    /* Success/Warning/Info colors */
+    --success: 122 61% 45%;
+    --warning: 42 96% 50%;
+    --info: 197 85% 60%;
+    --error: 0 84.2% 60.2%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* Dark mode background colors */
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    /* Dark mode card colors */
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    /* Dark mode popover colors */
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    /* Dark mode primary colors */
+    --primary: 158 80% 45%;
+    --primary-foreground: 222.2 84% 4.9%;
+
+    /* Dark mode secondary colors */
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    /* Dark mode muted colors */
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    /* Dark mode accent colors */
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    /* Dark mode destructive colors */
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    /* Dark mode border colors */
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 158 80% 45%;
+
+    /* Dark mode chart colors */
+    --chart-1: 158 80% 45%;
+    --chart-2: 173 80% 40%;
+    --chart-3: 197 85% 60%;
+    --chart-4: 43 96% 56%;
+    --chart-5: 27 87% 67%;
+
+    /* Dark mode nutrition colors */
+    --nutrition-protein: 14 91% 57%;
+    --nutrition-carbs: 42 96% 50%;
+    --nutrition-fat: 262 83% 67%;
+    --nutrition-fiber: 122 61% 45%;
+
+    /* Dark mode status colors */
+    --success: 122 61% 45%;
+    --warning: 42 96% 50%;
+    --info: 197 85% 60%;
+    --error: 0 84.2% 60.2%;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  /* Improved typography */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold leading-tight tracking-tight;
+  }
+  
+  h1 {
+    @apply text-3xl md:text-4xl lg:text-5xl;
+  }
+  
+  h2 {
+    @apply text-2xl md:text-3xl lg:text-4xl;
+  }
+  
+  h3 {
+    @apply text-xl md:text-2xl lg:text-3xl;
+  }
+  
+  h4 {
+    @apply text-lg md:text-xl;
+  }
+  
+  /* Smooth transitions for theme changes */
+  html {
+    @apply transition-colors duration-300;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-muted;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full hover:bg-muted-foreground/20;
+  }
+  
+  /* Focus visible improvements */
+  *:focus-visible {
+    @apply ring-2 ring-primary ring-offset-2 ring-offset-background outline-none;
+  }
+  
+  /* Improved button and input styling */
+  button, [role="button"] {
+    @apply transition-all duration-200;
+  }
+  
+  input, textarea, select {
+    @apply transition-colors duration-200;
+  }
+}
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-success: hsl(var(--success));
+  --color-warning: hsl(var(--warning));
+  --color-info: hsl(var(--info));
+  --color-error: hsl(var(--error));
+  --color-nutrition-protein: hsl(var(--nutrition-protein));
+  --color-nutrition-carbs: hsl(var(--nutrition-carbs));
+  --color-nutrition-fat: hsl(var(--nutrition-fat));
+  --color-nutrition-fiber: hsl(var(--nutrition-fiber));
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
 }
