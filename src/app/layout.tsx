@@ -1,8 +1,8 @@
 import type { Metadata } from "next"
+import { StackProvider, StackTheme } from "@stackframe/stack";
+import { stackClientApp } from "../stack/client";
 import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
-import Navbar from '@/components/layout/Navbar'
-import Footer from '@/components/layout/Footer'
 import { ReactQueryProvider } from '@/components/providers/ReactQueryProvider'
 
 const geistSans = Geist({
@@ -29,15 +29,11 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      ><StackProvider app={stackClientApp}><StackTheme>
         <ReactQueryProvider>
-          <div className="min-h-screen bg-background flex flex-col">
-            <Navbar />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
+          {children}
         </ReactQueryProvider>
-      </body>
+      </StackTheme></StackProvider></body>
     </html>
   )
 }

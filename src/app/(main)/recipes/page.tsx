@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Search, Filter, Clock, Users, ChefHat, Star, Leaf, Flame, Heart } from 'lucide-react';
@@ -37,7 +37,7 @@ export default function RecipesPage() {
 
   useEffect(() => {
     filterRecipesUpdated();
-  }, [recipes, searchTerm, selectedCuisine, selectedDifficulty, selectedDietaryTags]);
+  }, [filterRecipesUpdated]);
 
   const fetchRecipes = async () => {
     try {
@@ -77,7 +77,7 @@ export default function RecipesPage() {
   };
 
   // Update filter logic to handle 'all' values
-  const filterRecipesUpdated = () => {
+  const filterRecipesUpdated = useCallback(() => {
     // Ensure recipes is always an array
     if (!Array.isArray(recipes)) {
       setFilteredRecipes([]);
@@ -112,7 +112,7 @@ export default function RecipesPage() {
     }
 
     setFilteredRecipes(filtered);
-  };
+  }, [recipes, searchTerm, selectedCuisine, selectedDifficulty, selectedDietaryTags]);
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -252,7 +252,7 @@ export default function RecipesPage() {
           <p className="text-slate-600">
             Showing <span className="font-semibold">{filteredRecipes.length}</span> recipes
             {searchTerm && (
-              <span> for "<span className="font-semibold">{searchTerm}</span>"</span>
+              <span> for &quot;<span className="font-semibold">{searchTerm}</span>&quot;</span>
             )}
           </p>
         </div>
@@ -279,7 +279,7 @@ export default function RecipesPage() {
             <ChefHat className="h-16 w-16 text-slate-400 mx-auto mb-6" />
             <h3 className="text-2xl font-semibold text-slate-700 mb-2">No recipes found</h3>
             <p className="text-slate-500 mb-6">
-              Try adjusting your search terms or filters to find what you're looking for.
+              Try adjusting your search terms or filters to find what you&apos;re looking for.
             </p>
             <Button onClick={clearFilters} className="bg-orange-500 hover:bg-orange-600 text-white">
               Clear Filters

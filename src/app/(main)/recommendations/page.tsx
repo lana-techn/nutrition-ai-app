@@ -48,7 +48,7 @@ export default function RecommendationsPage() {
   const [recommendations, setRecommendations] = useState<NutritionRecommendation | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const updateProfile = (key: keyof UserProfile, value: any) => {
+  const updateProfile = (key: keyof UserProfile, value: string | number | string[]) => {
     setProfile(prev => ({ ...prev, [key]: value }));
   };
 

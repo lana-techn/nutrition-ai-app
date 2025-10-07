@@ -23,16 +23,6 @@ export interface FoodItem {
   createdAt: Date;
 }
 
-export interface NutritionLog {
-  id: number;
-  userId: number;
-  foodItemId: number;
-  quantityGrams: number;
-  mealType: string;
-  loggedAt: Date;
-  foodItem?: FoodItem;
-}
-
 export interface BlogPost {
   id: number;
   title: string;
@@ -44,14 +34,6 @@ export interface BlogPost {
   published: boolean;
   createdAt: Date;
   updatedAt: Date;
-}
-
-export interface FoodAnalysis {
-  id: number;
-  userId: number;
-  imageUrl: string;
-  analysisResult: string;
-  createdAt: Date;
 }
 
 export interface NutritionRecommendation {

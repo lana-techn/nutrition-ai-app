@@ -2,11 +2,21 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Apple, Camera, BookOpen, MessageCircle, Target, ChefHat } from 'lucide-react';
+import { Apple, Camera, BookOpen, MessageCircle, Target, ChefHat, User, LogOut, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useUser } from '@stackframe/stack';
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export default function Navbar() {
   const pathname = usePathname();
+  const user = useUser();
 
   const isActive = (path: string) => pathname === path;
 
@@ -89,10 +99,53 @@ export default function Navbar() {
             </Button>
           </div>
 
-          <div className="md:hidden">
-            <Button variant="ghost" size="sm">
-              Menu
-            </Button>
+          {/* Auth Section */}
+          <div className="flex items-center space-x-4">
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="flex items-center space-x-2">
+                    <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center">
+                      <User className="h-4 w-4 text-white" />
+                    </div>
+                    <span className="hidden md:inline">{user.displayName || user.primaryEmail}</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard" className="flex items-center space-x-2">
+                      <User className="h-4 w-4" />
+                      <span>Dashboard</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/profile" className="flex items-center space-x-2">
+                      <Settings className="h-4 w-4" />
+                      <span>Profile Settings</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem 
+                    onClick={() => user.signOut()}
+                    className="flex items-center space-x-2 text-red-600"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    <span>Sign Out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <div className="flex items-center space-x-2">
+                <Button variant="ghost" size="sm" asChild>
+                  <Link href="/handler/sign-in">Sign In</Link>
+                </Button>
+                <Button size="sm" asChild>
+                  <Link href="/handler/sign-up">Get Started</Link>
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </div>

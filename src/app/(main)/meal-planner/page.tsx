@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Calendar, ChefHat, Plus, Edit2, Trash2, Clock, Users, Flame, Target, Download, Share2 } from 'lucide-react';
+import { useState, useEffect, useCallback } from 'react';
+import { Calendar, ChefHat, Plus, Edit2, Clock, Flame, Target, Download, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -51,12 +51,11 @@ export default function MealPlannerPage() {
     startDate: new Date(),
     daysCount: 7
   });
-  const [selectedDay, setSelectedDay] = useState<CalendarDay | null>(null);
-  const [editingMeal, setEditingMeal] = useState<{ dayIndex: number; mealType: string } | null>(null);
+  const [, setEditingMeal] = useState<{ dayIndex: number; mealType: string } | null>(null);
 
   useEffect(() => {
     generateCalendarDays();
-  }, [currentWeek]);
+  }, [generateCalendarDays]);
 
   function getStartOfWeek(date: Date): Date {
     const d = new Date(date);
@@ -65,7 +64,7 @@ export default function MealPlannerPage() {
     return new Date(d.setDate(diff));
   }
 
-  function generateCalendarDays() {
+  const generateCalendarDays = useCallback(() => {
     const days: CalendarDay[] = [];
     const startDate = new Date(currentWeek);
     
@@ -81,7 +80,7 @@ export default function MealPlannerPage() {
     }
     
     setCalendarDays(days);
-  }
+  }, [currentWeek]);
 
   const navigateWeek = (direction: 'prev' | 'next') => {
     const newWeek = new Date(currentWeek);
@@ -89,7 +88,7 @@ export default function MealPlannerPage() {
     setCurrentWeek(newWeek);
   };
 
-  const updateGeneratorForm = (key: keyof MealPlanRequest, value: any) => {
+  const updateGeneratorForm = (key: keyof MealPlanRequest, value: string | number | string[]) => {
     setGeneratorForm(prev => ({ ...prev, [key]: value }));
   };
 
@@ -182,7 +181,7 @@ export default function MealPlannerPage() {
         mealType: 'breakfast',
         recipeId: mockRecipes[day % 2].id,
         servings: 1,
-        recipe: mockRecipes[day % 2] as any
+        recipe: mockRecipes[day % 2] as Recipe
       });
 
       // Lunch
@@ -193,7 +192,7 @@ export default function MealPlannerPage() {
         mealType: 'lunch',
         recipeId: mockRecipes[2 + (day % 2)].id,
         servings: 1,
-        recipe: mockRecipes[2 + (day % 2)] as any
+        recipe: mockRecipes[2 + (day % 2)] as Recipe
       });
 
       // Dinner
@@ -204,7 +203,7 @@ export default function MealPlannerPage() {
         mealType: 'dinner',
         recipeId: mockRecipes[4 + (day % 2)].id,
         servings: 1,
-        recipe: mockRecipes[4 + (day % 2)] as any
+        recipe: mockRecipes[4 + (day % 2)] as Recipe
       });
 
       // Snack
@@ -215,7 +214,7 @@ export default function MealPlannerPage() {
         mealType: 'snack',
         recipeId: mockRecipes[6 + (day % 2)].id,
         servings: 1,
-        recipe: mockRecipes[6 + (day % 2)] as any
+        recipe: mockRecipes[6 + (day % 2)] as Recipe
       });
     }
     return entries;
@@ -244,8 +243,10 @@ export default function MealPlannerPage() {
     
     Object.values(day.meals).forEach(meal => {
       if (meal?.recipe) {
-        totalCalories += (meal.recipe as any).calories * meal.servings;
-        totalProtein += (meal.recipe as any).protein * meal.servings;
+        const recipeCalories = (meal.recipe as Recipe).nutrition?.calories || ((meal.recipe as { calories?: number }).calories) || 0;
+        const recipeProtein = (meal.recipe as Recipe).nutrition?.protein || ((meal.recipe as { protein?: number }).protein) || 0;
+        totalCalories += recipeCalories * meal.servings;
+        totalProtein += recipeProtein * meal.servings;
       }
     });
     
@@ -394,11 +395,11 @@ export default function MealPlannerPage() {
                             <div className="flex items-center space-x-2 mt-2 text-xs text-slate-500">
                               <div className="flex items-center space-x-1">
                                 <Flame className="h-3 w-3" />
-                                <span>{(meal.recipe as any).calories} cal</span>
+                                <span>{((meal.recipe as Recipe).nutrition?.calories || ((meal.recipe as { calories?: number }).calories) || 0)} cal</span>
                               </div>
                               <div className="flex items-center space-x-1">
                                 <Clock className="h-3 w-3" />
-                                <span>{(meal.recipe as any).prepTime}m</span>
+                                <span>{((meal.recipe as Recipe).prepTime || ((meal.recipe as { prepTime?: number }).prepTime) || 0)}m</span>
                               </div>
                             </div>
                           </div>

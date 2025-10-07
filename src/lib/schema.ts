@@ -10,12 +10,18 @@ export const users = pgTable('users', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),
   email: text('email').unique().notNull(),
-  age: integer('age').notNull(),
+  password: text('password'), // nullable for OAuth users
+  age: integer('age'),
   weight: doublePrecision('weight'),
   height: doublePrecision('height'),
   activityLevel: text('activity_level'),
   dietaryPreferences: text('dietary_preferences'),
+  avatar: text('avatar'),
+  isVerified: boolean('is_verified').default(false),
+  provider: text('provider').default('email'), // 'email', 'google', etc.
+  providerId: text('provider_id'),
   createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
 });
 
 // Food items table
@@ -32,16 +38,6 @@ export const foodItems = pgTable('food_items', {
   createdAt: timestamp('created_at').defaultNow(),
 });
 
-// Nutrition logs table
-export const nutritionLogs = pgTable('nutrition_logs', {
-  id: serial('id').primaryKey(),
-  userId: integer('user_id').references(() => users.id),
-  foodItemId: integer('food_item_id').references(() => foodItems.id),
-  quantityGrams: doublePrecision('quantity_grams').notNull(),
-  mealType: mealTypeEnum('meal_type').notNull(),
-  loggedAt: timestamp('logged_at').defaultNow(),
-});
-
 // Blog posts table
 export const blogPosts = pgTable('blog_posts', {
   id: serial('id').primaryKey(),
@@ -54,15 +50,6 @@ export const blogPosts = pgTable('blog_posts', {
   published: boolean('published').default(false),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow(),
-});
-
-// Food analysis table
-export const foodAnalysis = pgTable('food_analysis', {
-  id: serial('id').primaryKey(),
-  userId: integer('user_id').references(() => users.id),
-  imageUrl: text('image_url').notNull(),
-  analysisResult: text('analysis_result').notNull(),
-  createdAt: timestamp('created_at').defaultNow(),
 });
 
 // Recipes table
@@ -129,24 +116,11 @@ export const mealPlanEntries = pgTable('meal_plan_entries', {
 
 // Relations
 export const usersRelations = relations(users, ({ many }) => ({
-  nutritionLogs: many(nutritionLogs),
-  foodAnalyses: many(foodAnalysis),
+  // Relations can be added here when needed
 }));
 
 export const foodItemsRelations = relations(foodItems, ({ many }) => ({
-  nutritionLogs: many(nutritionLogs),
   recipeIngredients: many(recipeIngredients),
-}));
-
-export const nutritionLogsRelations = relations(nutritionLogs, ({ one }) => ({
-  user: one(users, {
-    fields: [nutritionLogs.userId],
-    references: [users.id],
-  }),
-  foodItem: one(foodItems, {
-    fields: [nutritionLogs.foodItemId],
-    references: [foodItems.id],
-  }),
 }));
 
 export const recipesRelations = relations(recipes, ({ many }) => ({
@@ -179,3 +153,4 @@ export const mealPlanEntriesRelations = relations(mealPlanEntries, ({ one }) => 
     references: [recipes.id],
   }),
 }));
+

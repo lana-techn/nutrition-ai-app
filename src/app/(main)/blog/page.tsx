@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { BookOpen, Search, Calendar, User, Tag, TrendingUp, Star, Clock } from 'lucide-react';
+import { BookOpen, Search, Calendar, User, TrendingUp, Star, Clock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import type { BlogPost } from '@/lib/types';
@@ -52,7 +52,7 @@ export default function BlogPage() {
 
   useEffect(() => {
     filterPosts();
-  }, [posts, searchTerm, selectedCategory]);
+  }, [posts, searchTerm, selectedCategory, filterPosts]);
 
   const fetchPosts = async () => {
     try {
@@ -74,7 +74,7 @@ export default function BlogPage() {
     }
   };
 
-  const filterPosts = () => {
+  const filterPosts = useCallback(() => {
     // Ensure posts is always an array
     if (!Array.isArray(posts)) {
       setFilteredPosts([]);
@@ -98,7 +98,7 @@ export default function BlogPage() {
     }
 
     setFilteredPosts(filtered);
-  };
+  }, [posts, searchTerm, selectedCategory]);
 
   const clearFilters = () => {
     setSearchTerm('');
@@ -230,7 +230,7 @@ export default function BlogPage() {
           <p className="text-slate-600">
             Showing <span className="font-semibold">{filteredPosts.length}</span> articles
             {searchTerm && (
-              <span> for "<span className="font-semibold">{searchTerm}</span>"</span>
+              <span> for &quot;<span className="font-semibold">{searchTerm}</span>&quot;</span>
             )}
             {selectedCategory && (
               <span> in <span className="font-semibold">{selectedCategory}</span></span>
