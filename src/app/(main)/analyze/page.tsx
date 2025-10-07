@@ -147,22 +147,24 @@ export default function AnalyzePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-cyan-50 to-blue-50 py-12">
+    <div className="min-h-screen bg-background py-12">
       <div className="container mx-auto px-4 max-w-6xl">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mb-6">
             <div className="relative">
-              <Sparkles className="h-12 w-12 text-emerald-600" />
-              <div className="absolute -top-1 -right-1 w-6 h-6 bg-cyan-500 rounded-full flex items-center justify-center">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/20 flex items-center justify-center">
+                <Sparkles className="h-8 w-8 text-primary" />
+              </div>
+              <div className="absolute -top-1 -right-1 w-6 h-6 bg-accent rounded-full flex items-center justify-center">
                 <Zap className="h-3 w-3 text-white" />
               </div>
             </div>
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-4">
+          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent mb-4">
             AI Food Analysis
           </h1>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Upload a photo of your meal and get instant nutritional insights powered by advanced AI technology. 
             Discover calories, macros, and personalized recommendations in seconds.
           </p>
@@ -170,16 +172,18 @@ export default function AnalyzePage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Upload Section */}
-          <Card className="border-0 shadow-2xl bg-white/80 backdrop-blur-sm">
+          <Card className="border border-border/50 shadow-lg bg-card/80 backdrop-blur-sm hover:shadow-xl transition-all duration-300">
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2 text-2xl text-slate-800">
-                <Camera className="h-6 w-6 text-emerald-600" />
+              <CardTitle className="flex items-center space-x-2 text-2xl text-foreground">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+                  <Camera className="h-5 w-5 text-primary" />
+                </div>
                 <span>Upload Your Food Photo</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-4">
-                <Label htmlFor="food-image" className="text-sm font-medium text-slate-700">
+                <Label htmlFor="food-image" className="text-sm font-medium text-foreground">
                   Select Image
                 </Label>
                 <Input
@@ -196,10 +200,10 @@ export default function AnalyzePage() {
                   onDragLeave={handleDrag}
                   onDragOver={handleDrag}
                   onDrop={handleDrop}
-                  className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all duration-300 group ${
+                  className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all duration-300 group ${
                     dragActive 
-                      ? 'border-emerald-500 bg-emerald-50 scale-105' 
-                      : 'border-emerald-300 hover:border-emerald-500 hover:bg-emerald-50/50'
+                      ? 'border-primary bg-primary/5 scale-[1.02]' 
+                      : 'border-border hover:border-primary hover:bg-primary/5'
                   }`}
                 >
                   {selectedImage ? (
@@ -219,7 +223,7 @@ export default function AnalyzePage() {
                           e.stopPropagation();
                           triggerFileInput();
                         }}
-                        className="border-emerald-300 text-emerald-700 hover:bg-emerald-50"
+                        className="border-primary/20 text-primary hover:bg-primary/5"
                       >
                         <Upload className="h-4 w-4 mr-2" />
                         Change Image
@@ -227,12 +231,12 @@ export default function AnalyzePage() {
                     </div>
                   ) : (
                     <div className="space-y-4">
-                      <Upload className="h-16 w-16 text-emerald-400 mx-auto group-hover:text-emerald-600 transition-colors" />
+                      <Upload className="h-16 w-16 text-muted-foreground mx-auto group-hover:text-primary transition-colors" />
                       <div>
-                        <p className="text-lg font-medium text-slate-700 group-hover:text-emerald-700 transition-colors">
+                        <p className="text-lg font-medium text-foreground group-hover:text-primary transition-colors">
                           Drop your food photo here
                         </p>
-                        <p className="text-sm text-slate-500 mt-1">
+                        <p className="text-sm text-muted-foreground mt-1">
                           Or click to browse files (PNG, JPG, JPEG)
                         </p>
                       </div>
@@ -255,7 +259,7 @@ export default function AnalyzePage() {
               <Button
                 onClick={handleAnalyze}
                 disabled={!selectedImage || isAnalyzing}
-                className="w-full bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-700 hover:to-cyan-700 text-white py-3 text-lg font-semibold"
+                className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 rounded-xl"
               >
                 {isAnalyzing ? (
                   <>

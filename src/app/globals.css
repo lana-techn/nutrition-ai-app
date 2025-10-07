@@ -1,122 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&family=Inter+Tight:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 @layer base {
   :root {
     /* Background colors */
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 0 0% 94.1%; /* #f0f0f0 */
+    --foreground: 0 0% 3.9%; /* #0A0A0A */
 
     /* Card colors */
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%; /* white */
+    --card-foreground: 0 0% 3.9%;
 
     /* Popover colors */
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 0 0% 3.9%;
 
-    /* Primary colors - Emerald/Teal gradient */
-    --primary: 158 80% 45%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary colors */
+    --primary: 340 100% 53.3%; /* #FF0F67 */
+    --primary-foreground: 0 0% 100%;
 
     /* Secondary colors */
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 84% 4.9%;
+    --secondary: 53 100% 74.1%; /* #FFF07C */
+    --secondary-foreground: 0 0% 3.9%;
 
     /* Muted colors */
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 0 0% 95.1%; /* #F2F2F2 */
+    --muted-foreground: 0 0% 46.7%; /* #777777 */
 
     /* Accent colors */
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 84% 4.9%;
+    --accent: 157 31.8% 42.9%; /* #439775 */
+    --accent-foreground: 0 0% 3.9%;
 
     /* Destructive colors */
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
     /* Border colors */
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 158 80% 45%;
+    --border: 0 0% 89.8%; /* #E5E5E5 */
+    --input: 0 0% 89.8%;
+    --ring: 340 100% 53.3%;
 
-    /* Chart colors */
-    --chart-1: 158 80% 45%;
-    --chart-2: 173 80% 40%;
-    --chart-3: 197 85% 60%;
-    --chart-4: 43 96% 56%;
-    --chart-5: 27 87% 67%;
+    /* Highlight color */
+    --highlight: 237 89% 58.8%; /* #454ADE */
 
-    /* Nutrition specific colors */
-    --nutrition-protein: 14 91% 57%;
-    --nutrition-carbs: 42 96% 50%;
-    --nutrition-fat: 262 83% 67%;
-    --nutrition-fiber: 122 61% 45%;
+    /* Custom palette colors */
+    --highlight-light: 237 55% 91%; /* #DADBF8 */
+    --accent-light: 150 27% 86.1%; /* #D9EAE3 */
+    --primary-light: 340 100% 90.6%; /* #FFCFE1 */
+    --secondary-light: 53 100% 96.1%; /* #FFFCE5 */
+    --base-100: 0 0% 94.1%; /* #f0f0f0 */
+    --base-200: 0 0% 100%; /* #ffffff */
+    --base-300: 0 0% 95.1%; /* #F2F2F2 */
+    --base-content: 0 0% 3.9%; /* #0A0A0A */
 
-    /* Success/Warning/Info colors */
-    --success: 122 61% 45%;
-    --warning: 42 96% 50%;
-    --info: 197 85% 60%;
-    --error: 0 84.2% 60.2%;
+    /* Status colors */
+    --success: 160 57% 53.3%; /* #36D399 */
+    --warning: 42 96% 56.1%; /* #FBBD23 */
+    --info: 195 93% 76.1%; /* #3ABFF8 */
+    --error: 1 83% 71.4%; /* #F87272 */
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
   }
 
   .dark {
     /* Dark mode background colors */
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 0 0% 6.7%; /* #111111 */
+    --foreground: 0 0% 98%; /* #FAFAFA */
 
     /* Dark mode card colors */
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 9.4%; /* #181818 */
+    --card-foreground: 0 0% 98%;
 
     /* Dark mode popover colors */
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 9.4%;
+    --popover-foreground: 0 0% 98%;
 
     /* Dark mode primary colors */
-    --primary: 158 80% 45%;
-    --primary-foreground: 222.2 84% 4.9%;
+    --primary: 340 100% 53.3%; /* #FF0F67 */
+    --primary-foreground: 0 0% 98%;
 
     /* Dark mode secondary colors */
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 53 100% 74.1%; /* #FFF07C */
+    --secondary-foreground: 0 0% 6.7%;
 
     /* Dark mode muted colors */
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 0 0% 15.7%; /* #282828 */
+    --muted-foreground: 0 0% 60%; /* #999999 */
 
     /* Dark mode accent colors */
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 157 31.8% 42.9%; /* #439775 */
+    --accent-foreground: 0 0% 98%;
 
     /* Dark mode destructive colors */
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
 
     /* Dark mode border colors */
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 158 80% 45%;
+    --border: 0 0% 20%; /* #333333 */
+    --input: 0 0% 20%;
+    --ring: 340 100% 53.3%;
 
-    /* Dark mode chart colors */
-    --chart-1: 158 80% 45%;
-    --chart-2: 173 80% 40%;
-    --chart-3: 197 85% 60%;
-    --chart-4: 43 96% 56%;
-    --chart-5: 27 87% 67%;
+    /* Dark mode highlight */
+    --highlight: 237 89% 58.8%; /* #454ADE */
 
-    /* Dark mode nutrition colors */
-    --nutrition-protein: 14 91% 57%;
-    --nutrition-carbs: 42 96% 50%;
-    --nutrition-fat: 262 83% 67%;
-    --nutrition-fiber: 122 61% 45%;
+    /* Dark mode custom palette colors */
+    --highlight-light: 237 55% 25%; /* #2A2B5C */
+    --accent-light: 150 27% 25%; /* #2A3D35 */
+    --primary-light: 340 100% 25%; /* #66052A */
+    --secondary-light: 53 100% 25%; /* #66630A */
+    --base-100: 0 0% 6.7%; /* #111111 */
+    --base-200: 0 0% 9.4%; /* #181818 */
+    --base-300: 0 0% 15.7%; /* #282828 */
+    --base-content: 0 0% 98%; /* #FAFAFA */
 
     /* Dark mode status colors */
-    --success: 122 61% 45%;
-    --warning: 42 96% 50%;
-    --info: 197 85% 60%;
-    --error: 0 84.2% 60.2%;
+    --success: 160 57% 53.3%; /* #36D399 */
+    --warning: 42 96% 56.1%; /* #FBBD23 */
+    --info: 195 93% 76.1%; /* #3ABFF8 */
+    --error: 1 83% 71.4%; /* #F87272 */
   }
 }
 
@@ -125,7 +126,8 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground;
+    font-family: 'Inter Tight', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -135,6 +137,7 @@
   /* Improved typography */
   h1, h2, h3, h4, h5, h6 {
     @apply font-semibold leading-tight tracking-tight;
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
   
   h1 {
@@ -187,33 +190,40 @@
 }
 
 @theme inline {
+  --color-hightlight-light: #DADBF8;
+  --color-accent-light: #D9EAE3;
+  --color-primary-light: #FFCFE1;
+  --color-secondary-light: #FFFCE5;
+  --color-primary: #FF0F67;
+  --color-primary-content: #fff;
+  --color-secondary: #FFF07C;
+  --color-secondary-content: #0A0A0A;
+  --color-accent: #439775;
+  --color-accent-content: #0A0A0A;
+  --color-neutral: #222222;
+  --color-neutral-content: #FFFFFF;
+  --color-base-100: #f0f0f0;
+  --color-base-200: #ffffff;
+  --color-base-300: #F2F2F2;
+  --color-base-content: #0A0A0A;
+  --color-info: #3ABFF8;
+  --color-success: #36D399;
+  --color-warning: #FBBD23;
+  --color-error: #F87272;
+  --color-highlight: #454ADE;
+  --color-muted: #777777;
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
   --color-popover: hsl(var(--popover));
   --color-popover-foreground: hsl(var(--popover-foreground));
-  --color-primary: hsl(var(--primary));
-  --color-primary-foreground: hsl(var(--primary-foreground));
-  --color-secondary: hsl(var(--secondary));
-  --color-secondary-foreground: hsl(var(--secondary-foreground));
-  --color-muted: hsl(var(--muted));
   --color-muted-foreground: hsl(var(--muted-foreground));
-  --color-accent: hsl(var(--accent));
-  --color-accent-foreground: hsl(var(--accent-foreground));
   --color-destructive: hsl(var(--destructive));
   --color-destructive-foreground: hsl(var(--destructive-foreground));
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
-  --color-success: hsl(var(--success));
-  --color-warning: hsl(var(--warning));
-  --color-info: hsl(var(--info));
-  --color-error: hsl(var(--error));
-  --color-nutrition-protein: hsl(var(--nutrition-protein));
-  --color-nutrition-carbs: hsl(var(--nutrition-carbs));
-  --color-nutrition-fat: hsl(var(--nutrition-fat));
-  --color-nutrition-fiber: hsl(var(--nutrition-fiber));
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-display: 'Outfit', sans-serif;
+  --font-sans: 'Inter Tight', sans-serif;
 }

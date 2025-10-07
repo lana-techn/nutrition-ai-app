@@ -3,12 +3,14 @@
 import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Search, Filter, Clock, Users, ChefHat, Star, Leaf, Flame, Heart } from 'lucide-react';
+import { Search, Filter, Clock, Users, ChefHat, Star, Leaf, Flame, Heart, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { PageWrapper } from '@/components/ui/page-wrapper';
+import { PageHeader } from '@/components/ui/page-header';
 import type { Recipe } from '@/lib/types';
 
 const DIETARY_TAGS = [
@@ -203,43 +205,28 @@ export default function RecipesPage() {
   };
 
   return (
-    <div className="min-h-screen">
-      <div className="container mx-auto px-4 py-12">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center mb-6">
-            <div className="relative">
-              <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full flex items-center justify-center shadow-xl">
-                <ChefHat className="h-8 w-8 text-white" />
-              </div>
-              <div className="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                <Heart className="h-3 w-3 text-white" />
-              </div>
-            </div>
-          </div>
-          <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-4">
-            Healthy Recipes
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            Discover thousands of nutritious and delicious recipes designed by nutrition experts. 
-            Every recipe comes with detailed nutritional information and cooking instructions.
-          </p>
-        </div>
+    <PageWrapper maxWidth="7xl">
+      <PageHeader
+        title="Healthy Recipes"
+        description="Discover thousands of nutritious and delicious recipes designed by nutrition experts. Every recipe comes with detailed nutritional information and cooking instructions."
+        icon={BookOpen}
+        secondaryIcon={Heart}
+      />
 
-        {/* Search and Filters */}
-        <Card className="shadow-xl bg-card/80 backdrop-blur-sm mb-8">
-          <CardContent className="p-6">
-            <div className="space-y-6">
-              {/* Search Bar */}
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input
-                  placeholder="Search recipes by name or ingredient..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 pr-4 py-3 text-lg"
-                />
-              </div>
+      {/* Search and Filters */}
+      <Card className="border border-border/50 shadow-xl bg-card/80 backdrop-blur-sm mb-8 hover:shadow-2xl transition-all duration-300">
+        <CardContent className="p-6">
+          <div className="space-y-6">
+            {/* Search Bar */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+              <Input
+                placeholder="Search recipes by name or ingredient..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10 pr-4 py-3 text-lg border-border focus:ring-primary"
+              />
+            </div>
 
               {/* Filter Toggle */}
               <div className="flex items-center justify-between">
@@ -251,7 +238,7 @@ export default function RecipesPage() {
                   <Filter className="h-4 w-4" />
                   <span>Filters</span>
                   {(selectedCuisine || selectedDifficulty || selectedDietaryTags.length > 0) && (
-                    <span className="ml-2 px-2 py-1 bg-orange-500 text-white text-xs rounded-full">
+                    <span className="ml-2 px-2 py-1 bg-primary text-white text-xs rounded-full">
                       {[selectedCuisine, selectedDifficulty, ...selectedDietaryTags].filter(Boolean).length}
                     </span>
                   )}
@@ -453,8 +440,7 @@ export default function RecipesPage() {
             ))}
           </div>
         )}
-      </div>
-    </div>
+    </PageWrapper>
   );
 }
 

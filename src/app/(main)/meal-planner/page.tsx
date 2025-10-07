@@ -31,6 +31,13 @@ const CUISINE_PREFERENCES = [
   'Indian', 'Thai', 'Greek', 'Middle Eastern', 'French'
 ];
 
+function getStartOfWeek(date: Date): Date {
+  const d = new Date(date);
+  const day = d.getDay();
+  const diff = d.getDate() - day;
+  return new Date(d.setDate(diff));
+}
+
 export default function MealPlannerPage() {
   const [currentWeek, setCurrentWeek] = useState<Date>(getStartOfWeek(new Date()));
   const [calendarDays, setCalendarDays] = useState<CalendarDay[]>([]);
@@ -53,17 +60,6 @@ export default function MealPlannerPage() {
   });
   const [, setEditingMeal] = useState<{ dayIndex: number; mealType: string } | null>(null);
 
-  useEffect(() => {
-    generateCalendarDays();
-  }, [generateCalendarDays]);
-
-  function getStartOfWeek(date: Date): Date {
-    const d = new Date(date);
-    const day = d.getDay();
-    const diff = d.getDate() - day;
-    return new Date(d.setDate(diff));
-  }
-
   const generateCalendarDays = useCallback(() => {
     const days: CalendarDay[] = [];
     const startDate = new Date(currentWeek);
@@ -81,6 +77,11 @@ export default function MealPlannerPage() {
     
     setCalendarDays(days);
   }, [currentWeek]);
+
+  // Generate days when currentWeek changes
+  useEffect(() => {
+    generateCalendarDays();
+  }, [generateCalendarDays]);
 
   const navigateWeek = (direction: 'prev' | 'next') => {
     const newWeek = new Date(currentWeek);
@@ -111,7 +112,7 @@ export default function MealPlannerPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...generatorForm,
-          startDate: currentWeek
+          startDate: currentWeek.toISOString()
         })
       });
 
@@ -223,9 +224,10 @@ export default function MealPlannerPage() {
   const populateCalendarWithMealPlan = (mealPlan: MealPlan) => {
     setCalendarDays(prevDays => 
       prevDays.map(day => {
-        const dayMeals = mealPlan.meals.filter(meal => 
-          meal.date.toDateString() === day.date.toDateString()
-        );
+        const dayMeals = mealPlan.meals.filter(meal => {
+          const mealDate = new Date((meal as any).date);
+          return mealDate.toDateString() === day.date.toDateString();
+        });
         
         const meals: CalendarDay['meals'] = {};
         dayMeals.forEach(meal => {
@@ -264,24 +266,24 @@ export default function MealPlannerPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-red-50">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mb-6">
             <div className="relative">
-              <div className="w-16 h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center shadow-xl">
-                <Calendar className="h-8 w-8 text-white" />
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/20 flex items-center justify-center shadow-lg">
+                <Calendar className="h-8 w-8 text-primary" />
               </div>
-              <div className="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+              <div className="absolute -top-1 -right-1 w-6 h-6 bg-accent rounded-full flex items-center justify-center">
                 <ChefHat className="h-3 w-3 text-white" />
               </div>
             </div>
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-4">
+          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent mb-4">
             AI Meal Planner
           </h1>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Generate personalized weekly meal plans based on your nutrition goals, dietary preferences, and lifestyle. 
             Smart planning made simple with AI-powered recommendations.
           </p>
@@ -291,14 +293,23 @@ export default function MealPlannerPage() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
           <Button
             onClick={() => setShowGeneratorForm(true)}
-            className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-8 py-3 text-lg font-semibold"
+            className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white px-8 py-3 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 rounded-xl"
           >
             <Plus className="h-5 w-5 mr-2" />
             Generate New Meal Plan
           </Button>
           {currentMealPlan && (
             <>
-              <Button variant="outline" className="px-8 py-3">
+              <Button 
+                variant="outline" 
+                className="px-8 py-3"
+                onClick={() => {
+                  // dynamic import to reduce bundle size
+                  import('@/lib/export-utils').then(({ exportMealPlanToXLSX }) => {
+                    exportMealPlanToXLSX(currentMealPlan, `meal-plan-${new Date().toISOString().slice(0,10)}.xlsx`)
+                  });
+                }}
+              >
                 <Download className="h-5 w-5 mr-2" />
                 Export Plan
               </Button>
@@ -311,23 +322,23 @@ export default function MealPlannerPage() {
         </div>
 
         {/* Week Navigation */}
-        <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm mb-8">
+        <Card className="border border-border/50 shadow-xl bg-card/80 backdrop-blur-sm mb-8 hover:shadow-2xl transition-all duration-300">
           <CardHeader>
             <div className="flex items-center justify-between">
               <Button
                 variant="outline"
                 onClick={() => navigateWeek('prev')}
-                className="flex items-center space-x-2"
+                className="flex items-center space-x-2 border-primary/20 hover:bg-primary/5"
               >
                 <span>← Previous Week</span>
               </Button>
               <div className="text-center">
-                <h3 className="text-xl font-bold text-slate-800">
+                <h3 className="text-xl font-bold text-foreground">
                   {currentWeek.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} - {' '}
                   {new Date(currentWeek.getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                 </h3>
                 {currentMealPlan && (
-                  <p className="text-slate-600 mt-1">
+                  <p className="text-muted-foreground mt-1">
                     Target: {currentMealPlan.targetCalories} cal/day • {currentMealPlan.targetProtein}g protein
                   </p>
                 )}
