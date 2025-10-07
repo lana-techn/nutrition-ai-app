@@ -60,7 +60,8 @@ export default function BlogPage() {
       const response = await fetch('/api/nutrition/blog');
       if (response.ok) {
         const data = await response.json();
-        setPosts(data);
+        // Ensure data is an array
+        setPosts(Array.isArray(data) ? data : mockPosts);
       } else {
         // Fallback to mock data if API fails
         setPosts(mockPosts);
@@ -74,6 +75,12 @@ export default function BlogPage() {
   };
 
   const filterPosts = () => {
+    // Ensure posts is always an array
+    if (!Array.isArray(posts)) {
+      setFilteredPosts([]);
+      return;
+    }
+
     let filtered = posts;
 
     // Filter by search term
@@ -86,7 +93,7 @@ export default function BlogPage() {
     }
 
     // Filter by category
-    if (selectedCategory) {
+    if (selectedCategory && selectedCategory !== 'all') {
       filtered = filtered.filter(post => post.category === selectedCategory);
     }
 
@@ -98,15 +105,22 @@ export default function BlogPage() {
     setSelectedCategory('');
   };
 
-  const formatDate = (date: Date) => {
+  const formatDate = (date: Date | string) => {
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    if (isNaN(dateObj.getTime())) {
+      return 'Invalid date';
+    }
     return new Intl.DateTimeFormat('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
-    }).format(date);
+    }).format(dateObj);
   };
 
   const getReadingTime = (content: string) => {
+    if (!content || typeof content !== 'string') {
+      return 5; // Default reading time
+    }
     const wordsPerMinute = 200;
     const words = content.split(' ').length;
     return Math.ceil(words / wordsPerMinute);
@@ -189,7 +203,7 @@ export default function BlogPage() {
                     <SelectValue placeholder="All Categories" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Categories</SelectItem>
+                    <SelectItem value="all">All Categories</SelectItem>
                     {CATEGORIES.map(category => (
                       <SelectItem key={category} value={category}>{category}</SelectItem>
                     ))}
