@@ -106,32 +106,32 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-rose-50 to-purple-50">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Header */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-6">
             <div className="relative">
-              <div className="w-16 h-16 bg-gradient-to-r from-pink-500 to-rose-500 rounded-full flex items-center justify-center shadow-xl">
-                <Bot className="h-8 w-8 text-white" />
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/20 flex items-center justify-center shadow-lg">
+                <Bot className="h-8 w-8 text-primary" />
               </div>
-              <div className="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+              <div className="absolute -top-1 -right-1 w-6 h-6 bg-accent rounded-full flex items-center justify-center">
                 <Heart className="h-3 w-3 text-white" />
               </div>
             </div>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent mb-4">
             AI Nutrition Coach
           </h1>
-          <p className="text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Konsultasi dengan ahli gizi AI yang siap membantu 24/7. 
             Dapatkan saran nutrisi personal yang disesuaikan dengan kebutuhan Anda.
           </p>
         </div>
 
         {/* Chat Container */}
-        <Card className="border-0 shadow-2xl bg-white/80 backdrop-blur-sm h-[600px] flex flex-col">
-          <CardHeader className="bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-t-lg">
+        <Card className="border border-border/50 shadow-2xl bg-card/80 backdrop-blur-sm h-[600px] flex flex-col hover:shadow-3xl transition-all duration-300">
+          <CardHeader className="bg-gradient-to-r from-primary to-accent text-white rounded-t-xl">
             <CardTitle className="flex items-center space-x-3 text-xl">
               <MessageCircle className="h-6 w-6" />
               <span>Chat dengan AI Nutritionist</span>
