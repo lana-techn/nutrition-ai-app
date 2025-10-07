@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Target, User, Activity, Scale, Ruler, Calendar, Zap, TrendingUp, Award, Heart } from 'lucide-react';
+import { Target, User, Activity, Scale, Ruler, Calendar, Zap, TrendingUp, Award, Heart, Utensils, Edit2, ChefHat } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -70,10 +70,10 @@ export default function RecommendationsPage() {
   };
 
   const getBMICategory = (bmi: number) => {
-    if (bmi < 18.5) return { category: 'Underweight', color: 'text-blue-600 bg-blue-100' };
-    if (bmi < 25) return { category: 'Normal', color: 'text-green-600 bg-green-100' };
-    if (bmi < 30) return { category: 'Overweight', color: 'text-yellow-600 bg-yellow-100' };
-    return { category: 'Obese', color: 'text-red-600 bg-red-100' };
+    if (bmi < 18.5) return { category: 'Underweight', color: 'text-info bg-info/10 border-info/20' };
+    if (bmi < 25) return { category: 'Normal', color: 'text-success bg-success/10 border-success/20' };
+    if (bmi < 30) return { category: 'Overweight', color: 'text-warning bg-warning/10 border-warning/20' };
+    return { category: 'Obese', color: 'text-error bg-error/10 border-error/20' };
   };
 
   const generateRecommendations = async () => {
@@ -165,24 +165,24 @@ export default function RecommendationsPage() {
     const bmiInfo = bmi ? getBMICategory(parseFloat(bmi)) : null;
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-12">
-        <div className="container mx-auto px-4 max-w-6xl">
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto px-4 max-w-6xl py-12">
           {/* Header */}
           <div className="text-center mb-12">
             <div className="flex items-center justify-center mb-6">
               <div className="relative">
-                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center shadow-xl">
-                  <Award className="h-8 w-8 text-white" />
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/20 flex items-center justify-center shadow-lg">
+                  <Award className="h-8 w-8 text-primary" />
                 </div>
-                <div className="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                <div className="absolute -top-1 -right-1 w-6 h-6 bg-accent rounded-full flex items-center justify-center">
                   <Target className="h-3 w-3 text-white" />
                 </div>
               </div>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent mb-4">
               Your Personal Nutrition Plan
             </h1>
-            <p className="text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
               Based on your profile, here are your personalized nutrition recommendations
             </p>
           </div>
@@ -191,63 +191,67 @@ export default function RecommendationsPage() {
             {/* Main Recommendations */}
             <div className="lg:col-span-2 space-y-6">
               {/* Daily Targets */}
-              <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+              <Card className="border border-border/50 shadow-sm bg-card hover:shadow-lg transition-all duration-300">
                 <CardHeader>
-                  <CardTitle className="flex items-center space-x-2 text-2xl text-slate-800">
-                    <Target className="h-6 w-6 text-blue-600" />
-                    <span>Daily Nutrition Targets</span>
+                  <CardTitle className="flex items-center space-x-3">
+                    <div className="bg-primary/10 p-2 rounded-lg">
+                      <Target className="h-5 w-5 text-primary" />
+                    </div>
+                    <span className="text-foreground">Daily Nutrition Targets</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div className="text-center p-6 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl">
-                      <div className="w-12 h-12 bg-emerald-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <div className="group text-center p-6 bg-success/5 hover:bg-success/10 border border-success/20 rounded-xl transition-all duration-200 hover:shadow-md hover:-translate-y-1">
+                      <div className="w-12 h-12 bg-success rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
                         <Zap className="h-6 w-6 text-white" />
                       </div>
-                      <p className="text-3xl font-bold text-emerald-700 mb-1">{recommendations.calories}</p>
-                      <p className="text-sm text-emerald-600 font-medium">Calories</p>
+                      <p className="text-3xl font-bold text-success mb-1">{recommendations.calories}</p>
+                      <p className="text-sm text-muted-foreground font-medium">Calories</p>
                     </div>
-                    <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl">
-                      <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <div className="group text-center p-6 bg-primary/5 hover:bg-primary/10 border border-primary/20 rounded-xl transition-all duration-200 hover:shadow-md hover:-translate-y-1">
+                      <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
                         <TrendingUp className="h-6 w-6 text-white" />
                       </div>
-                      <p className="text-3xl font-bold text-blue-700 mb-1">{recommendations.protein}g</p>
-                      <p className="text-sm text-blue-600 font-medium">Protein</p>
+                      <p className="text-3xl font-bold text-primary mb-1">{recommendations.protein}g</p>
+                      <p className="text-sm text-muted-foreground font-medium">Protein</p>
                     </div>
-                    <div className="text-center p-6 bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl">
-                      <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <div className="group text-center p-6 bg-warning/5 hover:bg-warning/10 border border-warning/20 rounded-xl transition-all duration-200 hover:shadow-md hover:-translate-y-1">
+                      <div className="w-12 h-12 bg-warning rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
                         <Activity className="h-6 w-6 text-white" />
                       </div>
-                      <p className="text-3xl font-bold text-orange-700 mb-1">{recommendations.carbs}g</p>
-                      <p className="text-sm text-orange-600 font-medium">Carbs</p>
+                      <p className="text-3xl font-bold text-warning mb-1">{recommendations.carbs}g</p>
+                      <p className="text-sm text-muted-foreground font-medium">Carbs</p>
                     </div>
-                    <div className="text-center p-6 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl">
-                      <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <div className="group text-center p-6 bg-accent/5 hover:bg-accent/10 border border-accent/20 rounded-xl transition-all duration-200 hover:shadow-md hover:-translate-y-1">
+                      <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition-transform">
                         <Heart className="h-6 w-6 text-white" />
                       </div>
-                      <p className="text-3xl font-bold text-purple-700 mb-1">{recommendations.fat}g</p>
-                      <p className="text-sm text-purple-600 font-medium">Fat</p>
+                      <p className="text-3xl font-bold text-accent mb-1">{recommendations.fat}g</p>
+                      <p className="text-sm text-muted-foreground font-medium">Fat</p>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
               {/* Personalized Recommendations */}
-              <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+              <Card className="border border-border/50 shadow-sm bg-card hover:shadow-lg transition-all duration-300">
                 <CardHeader>
-                  <CardTitle className="flex items-center space-x-2 text-2xl text-slate-800">
-                    <User className="h-6 w-6 text-indigo-600" />
-                    <span>Personalized Recommendations</span>
+                  <CardTitle className="flex items-center space-x-3">
+                    <div className="bg-accent/10 p-2 rounded-lg">
+                      <User className="h-5 w-5 text-accent" />
+                    </div>
+                    <span className="text-foreground">Personalized Recommendations</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     {recommendations.notes.map((note, index) => (
-                      <div key={index} className="flex items-start space-x-3 p-4 bg-slate-50 rounded-lg">
-                        <div className="w-6 h-6 bg-indigo-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <div key={index} className="group flex items-start space-x-3 p-4 bg-muted/50 hover:bg-muted/80 rounded-xl border border-border/50 hover:border-primary/20 transition-all duration-200 hover:shadow-sm">
+                        <div className="w-6 h-6 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform">
                           <span className="text-white text-xs font-bold">{index + 1}</span>
                         </div>
-                        <p className="text-slate-700 leading-relaxed">{note}</p>
+                        <p className="text-foreground/80 leading-relaxed">{note}</p>
                       </div>
                     ))}
                   </div>
@@ -259,17 +263,19 @@ export default function RecommendationsPage() {
             <div className="space-y-6">
               {/* BMI Card */}
               {bmi && bmiInfo && (
-                <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+                <Card className="border border-border/50 shadow-sm bg-card hover:shadow-lg transition-all duration-300">
                   <CardHeader>
-                    <CardTitle className="flex items-center space-x-2 text-xl text-slate-800">
-                      <Scale className="h-5 w-5 text-slate-600" />
-                      <span>BMI Analysis</span>
+                    <CardTitle className="flex items-center space-x-3">
+                      <div className="bg-primary/10 p-2 rounded-lg">
+                        <Scale className="h-5 w-5 text-primary" />
+                      </div>
+                      <span className="text-foreground">BMI Analysis</span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="text-center">
-                      <div className="text-4xl font-bold text-slate-800 mb-2">{bmi}</div>
-                      <div className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${bmiInfo.color}`}>
+                      <div className="text-5xl font-bold text-foreground mb-3">{bmi}</div>
+                      <div className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium border ${bmiInfo.color}`}>
                         {bmiInfo.category}
                       </div>
                     </div>
@@ -278,37 +284,39 @@ export default function RecommendationsPage() {
               )}
 
               {/* Profile Summary */}
-              <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+              <Card className="border border-border/50 shadow-sm bg-card hover:shadow-lg transition-all duration-300">
                 <CardHeader>
-                  <CardTitle className="flex items-center space-x-2 text-xl text-slate-800">
-                    <User className="h-5 w-5 text-slate-600" />
-                    <span>Your Profile</span>
+                  <CardTitle className="flex items-center space-x-3">
+                    <div className="bg-accent/10 p-2 rounded-lg">
+                      <User className="h-5 w-5 text-accent" />
+                    </div>
+                    <span className="text-foreground">Your Profile</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-slate-600">Age:</span>
-                    <span className="font-medium">{profile.age} years</span>
+                  <div className="flex justify-between items-center p-2 rounded-lg hover:bg-muted/50 transition-colors">
+                    <span className="text-muted-foreground">Age:</span>
+                    <span className="font-semibold text-foreground">{profile.age} years</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-600">Gender:</span>
-                    <span className="font-medium capitalize">{profile.gender}</span>
+                  <div className="flex justify-between items-center p-2 rounded-lg hover:bg-muted/50 transition-colors">
+                    <span className="text-muted-foreground">Gender:</span>
+                    <span className="font-semibold text-foreground capitalize">{profile.gender}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-600">Weight:</span>
-                    <span className="font-medium">{profile.weight} kg</span>
+                  <div className="flex justify-between items-center p-2 rounded-lg hover:bg-muted/50 transition-colors">
+                    <span className="text-muted-foreground">Weight:</span>
+                    <span className="font-semibold text-foreground">{profile.weight} kg</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-600">Height:</span>
-                    <span className="font-medium">{profile.height} cm</span>
+                  <div className="flex justify-between items-center p-2 rounded-lg hover:bg-muted/50 transition-colors">
+                    <span className="text-muted-foreground">Height:</span>
+                    <span className="font-semibold text-foreground">{profile.height} cm</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-600">Activity:</span>
-                    <span className="font-medium capitalize">{profile.activityLevel.replace('-', ' ')}</span>
+                  <div className="flex justify-between items-center p-2 rounded-lg hover:bg-muted/50 transition-colors">
+                    <span className="text-muted-foreground">Activity:</span>
+                    <span className="font-semibold text-foreground capitalize">{profile.activityLevel.replace('-', ' ')}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-600">Goal:</span>
-                    <span className="font-medium capitalize">{profile.goal.replace('-', ' ')}</span>
+                  <div className="flex justify-between items-center p-2 rounded-lg hover:bg-muted/50 transition-colors">
+                    <span className="text-muted-foreground">Goal:</span>
+                    <span className="font-semibold text-foreground capitalize">{profile.goal.replace('-', ' ')}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -317,13 +325,15 @@ export default function RecommendationsPage() {
                 <Button 
                   onClick={() => setStep('form')}
                   variant="outline"
-                  className="w-full"
+                  className="w-full border-border/50 hover:bg-accent/5 hover:text-accent hover:border-accent/20 transition-all duration-200"
                 >
+                  <Edit2 className="h-4 w-4 mr-2" />
                   Update Profile
                 </Button>
                 <Button 
-                  className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white"
+                  className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white shadow-md hover:shadow-lg transition-all duration-200"
                 >
+                  <ChefHat className="h-4 w-4 mr-2" />
                   Generate Meal Plan
                 </Button>
               </div>
@@ -335,36 +345,36 @@ export default function RecommendationsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-12">
-      <div className="container mx-auto px-4 max-w-4xl">
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 max-w-4xl py-12">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center mb-6">
             <div className="relative">
-              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center shadow-xl">
-                <Target className="h-8 w-8 text-white" />
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/20 flex items-center justify-center shadow-lg">
+                <Target className="h-8 w-8 text-primary" />
               </div>
-              <div className="absolute -top-1 -right-1 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+              <div className="absolute -top-1 -right-1 w-6 h-6 bg-accent rounded-full flex items-center justify-center">
                 <User className="h-3 w-3 text-white" />
               </div>
             </div>
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-4">
+          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent mb-4">
             Personal Recommendations
           </h1>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Get personalized nutrition recommendations based on your health profile, goals, and lifestyle. 
             Our AI will create a custom plan just for you.
           </p>
         </div>
 
         {/* Assessment Form */}
-        <Card className="border-0 shadow-2xl bg-white/80 backdrop-blur-sm">
+        <Card className="border border-border/50 shadow-sm bg-card hover:shadow-lg transition-all duration-300">
           <CardHeader>
-            <CardTitle className="text-2xl text-center text-slate-800 mb-2">
+            <CardTitle className="text-2xl text-center text-foreground mb-2">
               Health & Lifestyle Assessment
             </CardTitle>
-            <p className="text-slate-600 text-center">
+            <p className="text-muted-foreground text-center">
               Please fill out this quick assessment to receive your personalized recommendations
             </p>
           </CardHeader>
@@ -372,8 +382,10 @@ export default function RecommendationsPage() {
             <div className="space-y-8">
               {/* Basic Info */}
               <div className="space-y-6">
-                <h3 className="text-lg font-semibold text-slate-800 flex items-center space-x-2">
-                  <User className="h-5 w-5" />
+                <h3 className="text-lg font-semibold text-foreground flex items-center space-x-2">
+                  <div className="bg-primary/10 p-1.5 rounded-lg">
+                    <User className="h-5 w-5 text-primary" />
+                  </div>
                   <span>Basic Information</span>
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -424,8 +436,10 @@ export default function RecommendationsPage() {
 
               {/* Activity & Goals */}
               <div className="space-y-6">
-                <h3 className="text-lg font-semibold text-slate-800 flex items-center space-x-2">
-                  <Activity className="h-5 w-5" />
+                <h3 className="text-lg font-semibold text-foreground flex items-center space-x-2">
+                  <div className="bg-accent/10 p-1.5 rounded-lg">
+                    <Activity className="h-5 w-5 text-accent" />
+                  </div>
                   <span>Activity & Goals</span>
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -463,7 +477,12 @@ export default function RecommendationsPage() {
 
               {/* Dietary Restrictions */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-slate-800">Dietary Preferences & Restrictions</h3>
+                <h3 className="text-lg font-semibold text-foreground flex items-center space-x-2">
+                  <div className="bg-primary/10 p-1.5 rounded-lg">
+                    <Utensils className="h-5 w-5 text-primary" />
+                  </div>
+                  <span>Dietary Preferences & Restrictions</span>
+                </h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {DIETARY_RESTRICTIONS.map(restriction => (
                     <Button
@@ -471,10 +490,10 @@ export default function RecommendationsPage() {
                       variant={profile.dietaryRestrictions.includes(restriction) ? "default" : "outline"}
                       size="sm"
                       onClick={() => toggleArrayValue('dietaryRestrictions', restriction)}
-                      className={`text-sm ${
+                      className={`text-sm transition-all duration-200 ${
                         profile.dietaryRestrictions.includes(restriction)
-                          ? 'bg-blue-500 hover:bg-blue-600 text-white'
-                          : 'border-slate-300 text-slate-600 hover:bg-blue-50'
+                          ? 'bg-primary hover:bg-primary/90 text-white border-primary shadow-sm'
+                          : 'border-border/50 text-muted-foreground hover:bg-primary/5 hover:text-primary hover:border-primary/20'
                       }`}
                     >
                       {restriction}
@@ -485,7 +504,12 @@ export default function RecommendationsPage() {
 
               {/* Health Conditions */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-slate-800">Health Conditions</h3>
+                <h3 className="text-lg font-semibold text-foreground flex items-center space-x-2">
+                  <div className="bg-accent/10 p-1.5 rounded-lg">
+                    <Heart className="h-5 w-5 text-accent" />
+                  </div>
+                  <span>Health Conditions</span>
+                </h3>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                   {HEALTH_CONDITIONS.map(condition => (
                     <Button
@@ -493,10 +517,10 @@ export default function RecommendationsPage() {
                       variant={profile.healthConditions.includes(condition) ? "default" : "outline"}
                       size="sm"
                       onClick={() => toggleArrayValue('healthConditions', condition)}
-                      className={`text-sm ${
+                      className={`text-sm transition-all duration-200 ${
                         profile.healthConditions.includes(condition)
-                          ? 'bg-indigo-500 hover:bg-indigo-600 text-white'
-                          : 'border-slate-300 text-slate-600 hover:bg-indigo-50'
+                          ? 'bg-accent hover:bg-accent/90 text-white border-accent shadow-sm'
+                          : 'border-border/50 text-muted-foreground hover:bg-accent/5 hover:text-accent hover:border-accent/20'
                       }`}
                     >
                       {condition}
@@ -510,7 +534,7 @@ export default function RecommendationsPage() {
                 <Button
                   onClick={generateRecommendations}
                   disabled={!isFormValid() || loading}
-                  className="w-full bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white py-4 text-lg font-semibold"
+                  className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white py-6 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? (
                     <>
