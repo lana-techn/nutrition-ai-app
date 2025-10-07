@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
-import { StackProvider, StackTheme } from "@stackframe/stack";
-import { stackClientApp } from "../stack/client";
+import { ClerkProvider } from '@clerk/nextjs';
 import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
 import { ReactQueryProvider } from '@/components/providers/ReactQueryProvider'
+import { ThemeProvider } from '@/components/providers/ThemeProvider'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,11 +29,20 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      ><StackProvider app={stackClientApp}><StackTheme>
-        <ReactQueryProvider>
-          {children}
-        </ReactQueryProvider>
-      </StackTheme></StackProvider></body>
+      >
+        <ClerkProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <ReactQueryProvider>
+              {children}
+            </ReactQueryProvider>
+          </ThemeProvider>
+        </ClerkProvider>
+      </body>
     </html>
   )
 }
