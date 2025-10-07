@@ -1,4 +1,4 @@
-import { pgTable, serial, text, integer, doublePrecision, timestamp, boolean, date, pgEnum } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, integer, doublePrecision, timestamp, boolean, date, pgEnum, jsonb, primaryKey } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
 // Enums
@@ -10,12 +10,18 @@ export const users = pgTable('users', {
   id: serial('id').primaryKey(),
   name: text('name').notNull(),
   email: text('email').unique().notNull(),
-  age: integer('age').notNull(),
+  password: text('password'), // nullable for OAuth users
+  age: integer('age'),
   weight: doublePrecision('weight'),
   height: doublePrecision('height'),
   activityLevel: text('activity_level'),
   dietaryPreferences: text('dietary_preferences'),
+  avatar: text('avatar'),
+  isVerified: boolean('is_verified').default(false),
+  provider: text('provider').default('email'), // 'email', 'google', etc.
+  providerId: text('provider_id'),
   createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
 });
 
 // Food items table
@@ -179,3 +185,4 @@ export const mealPlanEntriesRelations = relations(mealPlanEntries, ({ one }) => 
     references: [recipes.id],
   }),
 }));
+
