@@ -36,7 +36,7 @@ export default function RecipesPage() {
   }, []);
 
   useEffect(() => {
-    filterRecipes();
+    filterRecipesUpdated();
   }, [recipes, searchTerm, selectedCuisine, selectedDifficulty, selectedDietaryTags]);
 
   const fetchRecipes = async () => {
@@ -45,7 +45,9 @@ export default function RecipesPage() {
       const response = await fetch('/api/nutrition/recipes');
       if (response.ok) {
         const data = await response.json();
-        setRecipes(data);
+        // Handle API response structure (recipes endpoint returns {recipes: [...], total: ...})
+        const recipesData = data.recipes || data;
+        setRecipes(Array.isArray(recipesData) ? recipesData : mockRecipes);
       } else {
         // Fallback to mock data if API fails
         setRecipes(mockRecipes);
@@ -58,36 +60,6 @@ export default function RecipesPage() {
     }
   };
 
-  const filterRecipes = () => {
-    let filtered = recipes;
-
-    // Filter by search term
-    if (searchTerm) {
-      filtered = filtered.filter(recipe => 
-        recipe.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        recipe.description.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    // Filter by cuisine
-    if (selectedCuisine) {
-      filtered = filtered.filter(recipe => recipe.cuisine === selectedCuisine);
-    }
-
-    // Filter by difficulty
-    if (selectedDifficulty) {
-      filtered = filtered.filter(recipe => recipe.difficulty === selectedDifficulty);
-    }
-
-    // Filter by dietary tags
-    if (selectedDietaryTags.length > 0) {
-      filtered = filtered.filter(recipe => 
-        selectedDietaryTags.some(tag => recipe.dietaryTags.includes(tag))
-      );
-    }
-
-    setFilteredRecipes(filtered);
-  };
 
   const toggleDietaryTag = (tag: string) => {
     setSelectedDietaryTags(prev => 
@@ -102,6 +74,44 @@ export default function RecipesPage() {
     setSelectedCuisine('');
     setSelectedDifficulty('');
     setSelectedDietaryTags([]);
+  };
+
+  // Update filter logic to handle 'all' values
+  const filterRecipesUpdated = () => {
+    // Ensure recipes is always an array
+    if (!Array.isArray(recipes)) {
+      setFilteredRecipes([]);
+      return;
+    }
+
+    let filtered = recipes;
+
+    // Filter by search term
+    if (searchTerm) {
+      filtered = filtered.filter(recipe => 
+        recipe.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        recipe.description.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    // Filter by cuisine
+    if (selectedCuisine && selectedCuisine !== 'all') {
+      filtered = filtered.filter(recipe => recipe.cuisine === selectedCuisine);
+    }
+
+    // Filter by difficulty
+    if (selectedDifficulty && selectedDifficulty !== 'all') {
+      filtered = filtered.filter(recipe => recipe.difficulty === selectedDifficulty);
+    }
+
+    // Filter by dietary tags
+    if (selectedDietaryTags.length > 0) {
+      filtered = filtered.filter(recipe => 
+        selectedDietaryTags.some(tag => recipe.dietaryTags.includes(tag))
+      );
+    }
+
+    setFilteredRecipes(filtered);
   };
 
   const getDifficultyColor = (difficulty: string) => {
@@ -186,7 +196,7 @@ export default function RecipesPage() {
                         <SelectValue placeholder="All Cuisines" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">All Cuisines</SelectItem>
+                        <SelectItem value="all">All Cuisines</SelectItem>
                         {CUISINES.map(cuisine => (
                           <SelectItem key={cuisine} value={cuisine}>{cuisine}</SelectItem>
                         ))}
@@ -202,7 +212,7 @@ export default function RecipesPage() {
                         <SelectValue placeholder="All Levels" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">All Levels</SelectItem>
+                        <SelectItem value="all">All Levels</SelectItem>
                         <SelectItem value="easy">Easy</SelectItem>
                         <SelectItem value="medium">Medium</SelectItem>
                         <SelectItem value="hard">Hard</SelectItem>
