@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,59 +11,129 @@ export async function POST(req: NextRequest) {
 
     const geminiApiKey = process.env.GEMINI_API_KEY;
     if (!geminiApiKey) {
-      throw new Error('GEMINI_API_KEY environment variable is not set');
+      console.error('GEMINI_API_KEY not found in environment variables');
+      return NextResponse.json({ 
+        response: "Maaf, konfigurasi AI belum diatur dengan benar. Silakan hubungi administrator." 
+      }, { status: 500 });
     }
 
-    const systemPrompt = `You are a professional nutritionist AI assistant. Your role is to provide helpful, accurate, and evidence-based nutrition advice. 
+    const systemPrompt = `Kamu adalah asisten AI ahli gizi profesional yang membantu pengguna dengan pertanyaan seputar nutrisi, diet, dan kesehatan.
 
-Guidelines:
-- Always provide scientifically accurate information
-- Give practical, actionable advice
-- Be encouraging and supportive
-- Suggest consulting healthcare professionals for serious concerns
-- Focus on balanced, sustainable approaches to nutrition
-- Consider individual needs and preferences
-- Avoid extreme or fad diet recommendations
+Pedoman:
+- Berikan informasi yang akurat dan berbasis ilmiah
+- Berikan saran yang praktis dan dapat diterapkan
+- Bersikap mendukung dan memotivasi
+- Sarankan konsultasi dengan profesional kesehatan untuk masalah serius
+- Fokus pada pendekatan nutrisi yang seimbang dan berkelanjutan
+- Pertimbangkan kebutuhan dan preferensi individu
+- Hindari rekomendasi diet ekstrem atau fad diet
+- Jawab dalam Bahasa Indonesia dengan ramah dan profesional
 
-Context about the user: ${context || "No additional context provided"}
+${context ? `Konteks tentang pengguna: ${context}` : ''}
 
-User question: ${message}
+Pertanyaan pengguna: ${message}
 
-Please provide a helpful, professional response:`;
+Berikan respons yang membantu dan profesional:`;
 
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiApiKey}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{ text: systemPrompt }]
-          }]
-        })
-      }
-    );
-
-    const result = await response.json();
+    const isDev = process.env.NODE_ENV === 'development';
     
-    if (!response.ok) {
-      throw new Error(`Gemini API error: ${result.error?.message || 'Unknown error'}`);
+    // First, get list of available models
+    let availableModels: string[] = [];
+    try {
+      const modelsResponse = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models?key=${geminiApiKey}`
+      );
+      
+      if (modelsResponse.ok) {
+        const modelsData = await modelsResponse.json();
+        availableModels = modelsData.models
+          ?.filter((m: any) => m.supportedGenerationMethods?.includes('generateContent'))
+          .map((m: any) => m.name.replace('models/', ''))
+          || [];
+        
+        if (isDev) {
+          console.log(`📋 Found ${availableModels.length} available models`);
+        }
+      }
+    } catch (err) {
+      if (isDev) {
+        console.log('⚠️  Using default models (could not fetch list)');
+      }
     }
 
-    const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+    // If no models found, use common defaults
+    if (availableModels.length === 0) {
+      availableModels = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-pro'];
+    }
+    
+    // Initialize Gemini AI
+    const genAI = new GoogleGenerativeAI(geminiApiKey);
+    
+    let text = null;
+    let lastError = null;
+    let successModel = '';
+    
+    // Try each available model
+    for (const modelName of availableModels) {
+      try {
+        const model = genAI.getGenerativeModel({ model: modelName });
+        const result = await model.generateContent(systemPrompt);
+        const response = await result.response;
+        text = response.text();
+        
+        if (text) {
+          successModel = modelName;
+          break;
+        }
+      } catch (err) {
+        lastError = err;
+        // Only log detailed errors in development
+        if (isDev && availableModels.indexOf(modelName) < 3) {
+          console.log(`⚠️  Model ${modelName} failed:`, err instanceof Error ? err.message.split('\n')[0] : 'Unknown error');
+        }
+      }
+    }
+
     if (!text) {
-      throw new Error('No response from Gemini API');
+      const errorMsg = lastError instanceof Error ? lastError.message : 'No response from Gemini';
+      console.error('❌ All models failed. Last error:', errorMsg.split('\n')[0]);
+      throw new Error(`All Gemini models failed. Last error: ${errorMsg}`);
     }
 
+    if (isDev) {
+      console.log(`✅ Chat response generated using ${successModel}`);
+    }
+    
     return NextResponse.json({ response: text.trim() });
 
-  } catch (error) {
-    console.error('Chat error:', error);
+  } catch (error: unknown) {
+    const isDev = process.env.NODE_ENV === 'development';
+    
+    // Log error concisely
+    let errorMessage = "Maaf, terjadi kesalahan saat memproses permintaan Anda.";
+    
+    if (error instanceof Error) {
+      // Only log full details in development
+      if (isDev) {
+        console.error('❌ Chat error:', error.message.split('\n')[0]);
+      } else {
+        console.error('❌ Chat error occurred');
+      }
+      
+      // Check for specific error types
+      if (error.message.includes('API key')) {
+        errorMessage = "Konfigurasi API key tidak valid. Silakan periksa pengaturan.";
+      } else if (error.message.includes('quota')) {
+        errorMessage = "Kuota API telah habis. Silakan coba lagi nanti.";
+      } else if (error.message.includes('network')) {
+        errorMessage = "Masalah koneksi jaringan. Silakan coba lagi.";
+      }
+    } else {
+      console.error('❌ Unknown error occurred');
+    }
     
     return NextResponse.json({ 
-      response: "I'm sorry, but I'm having trouble connecting right now. Please try again later. In the meantime, remember that a balanced diet with plenty of fruits, vegetables, whole grains, and lean proteins is always a good foundation for healthy eating!" 
+      response: `${errorMessage}\n\nNamun, saya dapat memberikan saran umum: Diet seimbang dengan banyak buah-buahan, sayuran, biji-bijian utuh, dan protein tanpa lemak selalu menjadi fondasi yang baik untuk pola makan sehat!` 
     });
   }
 }
