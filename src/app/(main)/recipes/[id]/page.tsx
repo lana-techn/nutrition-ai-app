@@ -53,10 +53,10 @@ export default function RecipeDetailPage() {
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'easy': return 'bg-green-100 text-green-700 border-green-200';
-      case 'medium': return 'bg-yellow-100 text-yellow-700 border-yellow-200';
-      case 'hard': return 'bg-red-100 text-red-700 border-red-200';
-      default: return 'bg-gray-100 text-gray-700 border-gray-200';
+      case 'easy': return 'bg-success/10 text-success border-success/20';
+      case 'medium': return 'bg-warning/10 text-warning border-warning/20';
+      case 'hard': return 'bg-error/10 text-error border-error/20';
+      default: return 'bg-muted text-muted-foreground border-border';
     }
   };
 
@@ -83,19 +83,19 @@ export default function RecipeDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50">
+      <div className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-12">
           {/* Loading skeleton */}
           <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-32 mb-8"></div>
+            <div className="h-8 bg-muted rounded w-32 mb-8"></div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               <div className="lg:col-span-2 space-y-6">
-                <div className="h-96 bg-gray-200 rounded-lg"></div>
-                <div className="h-8 bg-gray-200 rounded w-3/4"></div>
-                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                <div className="h-96 bg-muted rounded-lg"></div>
+                <div className="h-8 bg-muted rounded w-3/4"></div>
+                <div className="h-4 bg-muted rounded w-1/2"></div>
               </div>
               <div className="space-y-4">
-                <div className="h-64 bg-gray-200 rounded-lg"></div>
+                <div className="h-64 bg-muted rounded-lg"></div>
               </div>
             </div>
           </div>
@@ -106,14 +106,14 @@ export default function RecipeDetailPage() {
 
   if (!recipe) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50">
+      <div className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-12">
           <div className="text-center py-16">
-            <ChefHat className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-            <h1 className="text-2xl font-bold text-gray-700 mb-2">Recipe not found</h1>
-            <p className="text-gray-500 mb-6">The recipe you&apos;re looking for doesn&apos;t exist or has been removed.</p>
+            <ChefHat className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+            <h1 className="text-2xl font-bold text-foreground mb-2">Recipe not found</h1>
+            <p className="text-muted-foreground mb-6">The recipe you&apos;re looking for doesn&apos;t exist or has been removed.</p>
             <Link href="/recipes">
-              <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+              <Button className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to Recipes
               </Button>
@@ -125,12 +125,12 @@ export default function RecipeDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         {/* Navigation */}
         <div className="flex items-center justify-between mb-8">
           <Link href="/recipes">
-            <Button variant="ghost" className="text-orange-600 hover:text-orange-700">
+            <Button variant="ghost" className="text-primary hover:text-primary/80">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Recipes
             </Button>
@@ -153,7 +153,7 @@ export default function RecipeDetailPage() {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Hero Image */}
-            <Card className="border-0 shadow-xl overflow-hidden bg-white">
+            <Card className="border border-border/50 shadow-sm bg-card hover:shadow-lg transition-all duration-300 overflow-hidden">
               <div className="relative h-96">
                 {recipe.imageUrl ? (
                   <Image
@@ -163,8 +163,8 @@ export default function RecipeDetailPage() {
                     className="object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-orange-100 to-amber-100 flex items-center justify-center">
-                    <ChefHat className="h-32 w-32 text-orange-300" />
+                  <div className="w-full h-full bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
+                    <ChefHat className="h-32 w-32 text-primary/30" />
                   </div>
                 )}
                 <div className="absolute top-4 right-4">
@@ -176,57 +176,57 @@ export default function RecipeDetailPage() {
             </Card>
 
             {/* Recipe Header */}
-            <Card className="border-0 shadow-xl bg-white">
+            <Card className="border border-border/50 shadow-sm bg-card hover:shadow-lg transition-all duration-300">
               <CardContent className="p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">{recipe.name}</h1>
-                    <p className="text-gray-600 text-lg leading-relaxed">{recipe.description}</p>
+                    <h1 className="text-3xl font-bold text-foreground mb-2">{recipe.name}</h1>
+                    <p className="text-muted-foreground text-lg leading-relaxed">{recipe.description}</p>
                   </div>
                   <div className="flex items-center space-x-1 ml-4">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                      <Star key={i} className="h-5 w-5 fill-warning text-warning" />
                     ))}
-                    <span className="text-gray-600 ml-2">(4.8)</span>
+                    <span className="text-muted-foreground ml-2">(4.8)</span>
                   </div>
                 </div>
 
                 {/* Quick Info */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-4 border-y border-gray-100">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 py-4 border-y border-border/50">
                   <div className="text-center">
-                    <div className="flex items-center justify-center text-orange-600 mb-2">
+                    <div className="flex items-center justify-center text-primary mb-2">
                       <Clock className="h-5 w-5 mr-1" />
                       <span className="font-semibold">Prep</span>
                     </div>
-                    <p className="text-gray-700">{recipe.prepTime} min</p>
+                    <p className="text-foreground">{recipe.prepTime} min</p>
                   </div>
                   <div className="text-center">
-                    <div className="flex items-center justify-center text-orange-600 mb-2">
+                    <div className="flex items-center justify-center text-primary mb-2">
                       <Flame className="h-5 w-5 mr-1" />
                       <span className="font-semibold">Cook</span>
                     </div>
-                    <p className="text-gray-700">{recipe.cookTime} min</p>
+                    <p className="text-foreground">{recipe.cookTime} min</p>
                   </div>
                   <div className="text-center">
-                    <div className="flex items-center justify-center text-orange-600 mb-2">
+                    <div className="flex items-center justify-center text-primary mb-2">
                       <Users className="h-5 w-5 mr-1" />
                       <span className="font-semibold">Serves</span>
                     </div>
-                    <p className="text-gray-700">{recipe.servings}</p>
+                    <p className="text-foreground">{recipe.servings}</p>
                   </div>
                   <div className="text-center">
-                    <div className="flex items-center justify-center text-orange-600 mb-2">
+                    <div className="flex items-center justify-center text-primary mb-2">
                       <Flame className="h-5 w-5 mr-1" />
                       <span className="font-semibold">Calories</span>
                     </div>
-                    <p className="text-gray-700">{recipe.nutrition.calories}</p>
+                    <p className="text-foreground">{recipe.nutrition.calories}</p>
                   </div>
                 </div>
 
                 {/* Dietary Tags */}
                 <div className="flex flex-wrap gap-2 mt-4">
                   {recipe.dietaryTags.map(tag => (
-                    <Badge key={tag} variant="secondary" className="bg-green-100 text-green-700 hover:bg-green-200">
+                    <Badge key={tag} variant="secondary" className="bg-success/10 text-success hover:bg-success/20 border border-success/20">
                       <Leaf className="h-3 w-3 mr-1" />
                       {tag}
                     </Badge>
@@ -236,17 +236,17 @@ export default function RecipeDetailPage() {
             </Card>
 
             {/* Recipe Content Tabs */}
-            <Card className="border-0 shadow-xl bg-white">
+            <Card className="border border-border/50 shadow-sm bg-card hover:shadow-lg transition-all duration-300">
               <CardHeader>
-                <div className="flex space-x-4 border-b">
+                <div className="flex space-x-4 border-b border-border/50">
                   {(['ingredients', 'instructions', 'nutrition'] as const).map((tab) => (
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
                       className={`pb-2 px-1 text-sm font-medium border-b-2 transition-colors capitalize ${
                         activeTab === tab
-                          ? 'border-orange-500 text-orange-600'
-                          : 'border-transparent text-gray-500 hover:text-gray-700'
+                          ? 'border-primary text-primary'
+                          : 'border-transparent text-muted-foreground hover:text-foreground'
                       }`}
                     >
                       {tab}
@@ -289,13 +289,13 @@ export default function RecipeDetailPage() {
                             : `${getAdjustedAmount(ingredient.quantity?.toString() || '1', recipe.servings)} ${ingredient.unit || ''} ${ingredient.foodItem?.name || ingredient.name || ''}`;
                           
                           return (
-                            <li key={index} className="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                              <input type="checkbox" className="mr-3 h-4 w-4 text-orange-600 focus:ring-orange-500" />
-                              <span className="text-gray-700 flex-1">
+                            <li key={index} className="flex items-center p-3 bg-muted/50 rounded-lg hover:bg-muted transition-colors">
+                              <input type="checkbox" className="mr-3 h-4 w-4 text-primary focus:ring-primary" />
+                              <span className="text-foreground flex-1">
                                 {displayText.trim()}
                               </span>
                               {typeof ingredient === 'object' && ingredient.notes && (
-                                <span className="text-xs text-gray-500 italic ml-2">
+                                <span className="text-xs text-muted-foreground italic ml-2">
                                   ({ingredient.notes})
                                 </span>
                               )}
@@ -304,10 +304,10 @@ export default function RecipeDetailPage() {
                         })}
                       </ul>
                     ) : (
-                      <p className="text-gray-500 italic">No ingredients data available for this recipe.</p>
+                      <p className="text-muted-foreground italic">No ingredients data available for this recipe.</p>
                     )}
                     
-                    <Button className="mt-4 w-full bg-orange-500 hover:bg-orange-600 text-white">
+                    <Button className="mt-4 w-full bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white">
                       <ShoppingCart className="h-4 w-4 mr-2" />
                       Add to Shopping List
                     </Button>
@@ -321,15 +321,15 @@ export default function RecipeDetailPage() {
                       <ol className="space-y-4">
                         {recipe.instructions.map((instruction, index) => (
                           <li key={index} className="flex">
-                            <span className="flex-shrink-0 w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-semibold text-sm mr-4">
+                            <span className="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-primary to-accent text-white rounded-full flex items-center justify-center font-semibold text-sm mr-4">
                               {index + 1}
                             </span>
-                            <p className="text-gray-700 leading-relaxed pt-1">{instruction}</p>
+                            <p className="text-foreground leading-relaxed pt-1">{instruction}</p>
                           </li>
                         ))}
                       </ol>
                     ) : (
-                      <p className="text-gray-500 italic">No instructions data available for this recipe.</p>
+                      <p className="text-muted-foreground italic">No instructions data available for this recipe.</p>
                     )}
                   </div>
                 )}
@@ -337,31 +337,31 @@ export default function RecipeDetailPage() {
                 {activeTab === 'nutrition' && (
                   <div>
                     <h3 className="text-xl font-semibold mb-4">Nutrition Facts</h3>
-                    <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="bg-muted/30 p-4 rounded-lg">
                       <div className="grid grid-cols-2 gap-4">
-                        <div className="text-center p-4 bg-white rounded-lg">
-                          <p className="text-2xl font-bold text-orange-600">
+                        <div className="text-center p-4 bg-card rounded-lg border border-border/50">
+                          <p className="text-2xl font-bold text-primary">
                             {getAdjustedNutrition(recipe.nutrition.calories, recipe.servings)}
                           </p>
-                          <p className="text-gray-600">Calories</p>
+                          <p className="text-muted-foreground">Calories</p>
                         </div>
-                        <div className="text-center p-4 bg-white rounded-lg">
-                          <p className="text-2xl font-bold text-blue-600">
+                        <div className="text-center p-4 bg-card rounded-lg border border-border/50">
+                          <p className="text-2xl font-bold text-info">
                             {getAdjustedNutrition(recipe.nutrition.protein, recipe.servings)}g
                           </p>
-                          <p className="text-gray-600">Protein</p>
+                          <p className="text-muted-foreground">Protein</p>
                         </div>
-                        <div className="text-center p-4 bg-white rounded-lg">
-                          <p className="text-2xl font-bold text-green-600">
+                        <div className="text-center p-4 bg-card rounded-lg border border-border/50">
+                          <p className="text-2xl font-bold text-success">
                             {getAdjustedNutrition(recipe.nutrition.carbs, recipe.servings)}g
                           </p>
-                          <p className="text-gray-600">Carbs</p>
+                          <p className="text-muted-foreground">Carbs</p>
                         </div>
-                        <div className="text-center p-4 bg-white rounded-lg">
-                          <p className="text-2xl font-bold text-purple-600">
+                        <div className="text-center p-4 bg-card rounded-lg border border-border/50">
+                          <p className="text-2xl font-bold text-accent">
                             {getAdjustedNutrition(recipe.nutrition.fat, recipe.servings)}g
                           </p>
-                          <p className="text-gray-600">Fat</p>
+                          <p className="text-muted-foreground">Fat</p>
                         </div>
                       </div>
                       
@@ -369,27 +369,27 @@ export default function RecipeDetailPage() {
                       
                       <div className="grid grid-cols-3 gap-4 text-sm">
                         <div className="text-center">
-                          <p className="font-medium text-gray-700">
+                          <p className="font-medium text-foreground">
                             {getAdjustedNutrition(recipe.nutrition.fiber || 0, recipe.servings)}g
                           </p>
-                          <p className="text-gray-500">Fiber</p>
+                          <p className="text-muted-foreground">Fiber</p>
                         </div>
                         <div className="text-center">
-                          <p className="font-medium text-gray-700">
+                          <p className="font-medium text-foreground">
                             {getAdjustedNutrition(recipe.nutrition.sugar || 0, recipe.servings)}g
                           </p>
-                          <p className="text-gray-500">Sugar</p>
+                          <p className="text-muted-foreground">Sugar</p>
                         </div>
                         <div className="text-center">
-                          <p className="font-medium text-gray-700">
+                          <p className="font-medium text-foreground">
                             {getAdjustedNutrition(recipe.nutrition.sodium || 0, recipe.servings)}mg
                           </p>
-                          <p className="text-gray-500">Sodium</p>
+                          <p className="text-muted-foreground">Sodium</p>
                         </div>
                       </div>
                     </div>
                     
-                    <p className="text-xs text-gray-500 mt-4">
+                    <p className="text-xs text-muted-foreground mt-4">
                       * Nutrition facts are per serving based on {servings} serving(s)
                     </p>
                   </div>
@@ -401,9 +401,9 @@ export default function RecipeDetailPage() {
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Recipe Summary Card */}
-            <Card className="border-0 shadow-xl bg-white sticky top-4">
+            <Card className="border border-border/50 shadow-sm bg-card hover:shadow-lg transition-all duration-300 sticky top-4">
               <CardHeader>
-                <CardTitle className="flex items-center text-orange-600">
+                <CardTitle className="flex items-center text-primary">
                   <Heart className="h-5 w-5 mr-2" />
                   Recipe Summary
                 </CardTitle>
@@ -411,21 +411,21 @@ export default function RecipeDetailPage() {
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Total Time:</span>
+                    <span className="text-muted-foreground">Total Time:</span>
                     <span className="font-semibold">{recipe.prepTime + recipe.cookTime} min</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Difficulty:</span>
+                    <span className="text-muted-foreground">Difficulty:</span>
                     <Badge className={getDifficultyColor(recipe.difficulty)}>
                       {recipe.difficulty}
                     </Badge>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Cuisine:</span>
+                    <span className="text-muted-foreground">Cuisine:</span>
                     <span className="font-semibold">{recipe.cuisine}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Servings:</span>
+                    <span className="text-muted-foreground">Servings:</span>
                     <span className="font-semibold">{recipe.servings}</span>
                   </div>
                 </div>
@@ -433,7 +433,7 @@ export default function RecipeDetailPage() {
                 <Separator />
                 
                 <div className="text-center">
-                  <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white">
+                  <Button className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white">
                     <Heart className="h-4 w-4 mr-2" />
                     Save Recipe
                   </Button>
@@ -442,12 +442,12 @@ export default function RecipeDetailPage() {
             </Card>
 
             {/* Similar Recipes */}
-            <Card className="border-0 shadow-xl bg-white">
+            <Card className="border border-border/50 shadow-sm bg-card hover:shadow-lg transition-all duration-300">
               <CardHeader>
-                <CardTitle className="text-orange-600">You might also like</CardTitle>
+                <CardTitle className="text-primary">You might also like</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-gray-500 text-sm">Similar recipes will be shown here...</p>
+                <p className="text-muted-foreground text-sm">Similar recipes will be shown here...</p>
               </CardContent>
             </Card>
           </div>
