@@ -161,6 +161,15 @@
     @apply transition-colors duration-300;
   }
   
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  .scroll-smooth {
+    scroll-behavior: smooth;
+  }
+  
   /* Custom scrollbar */
   ::-webkit-scrollbar {
     @apply w-2;
@@ -186,6 +195,51 @@
   
   input, textarea, select {
     @apply transition-colors duration-200;
+  }
+  
+  /* Custom prose styling for markdown content */
+  .prose {
+    @apply text-foreground;
+  }
+  
+  .prose strong {
+    @apply font-bold text-foreground;
+  }
+  
+  .prose ul, .prose ol {
+    @apply my-2;
+  }
+  
+  .prose li {
+    @apply my-1;
+  }
+  
+  .prose p {
+    @apply my-2;
+  }
+  
+  .prose h1, .prose h2, .prose h3, .prose h4 {
+    @apply font-bold text-foreground;
+  }
+  
+  .prose code {
+    @apply bg-muted text-foreground px-1 py-0.5 rounded text-sm;
+  }
+  
+  .prose pre {
+    @apply bg-muted p-4 rounded-lg overflow-x-auto;
+  }
+  
+  .prose pre code {
+    @apply bg-transparent p-0;
+  }
+  
+  .prose a {
+    @apply text-primary hover:underline;
+  }
+  
+  .prose blockquote {
+    @apply border-l-4 border-primary pl-4 italic my-4;
   }
 }
 
