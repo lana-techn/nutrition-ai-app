@@ -1,10 +1,12 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { MessageCircle, Send, Loader2, Bot, User, Heart, Sparkles, Apple } from 'lucide-react';
+import { MessageCircle, Send, Loader2, Bot, User, Heart, Sparkles, Apple, ArrowDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface ChatMessage {
   id: string;
@@ -33,16 +35,46 @@ export default function ChatPage() {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showScrollButton, setShowScrollButton] = useState(false);
+  const [isUserAtBottom, setIsUserAtBottom] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  const scrollToBottom = (behavior: ScrollBehavior = 'smooth') => {
+    setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior, block: 'end' });
+    }, 100);
   };
 
+  // Check if user is near bottom of scroll
+  const checkIfAtBottom = () => {
+    if (messagesContainerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = messagesContainerRef.current;
+      const isNearBottom = scrollHeight - scrollTop - clientHeight < 100;
+      return isNearBottom;
+    }
+    return true;
+  };
+
+  // Handle scroll to detect if user is at bottom
+  const handleScroll = () => {
+    const isAtBottom = checkIfAtBottom();
+    setIsUserAtBottom(isAtBottom);
+    setShowScrollButton(!isAtBottom);
+  };
+
+  // Only auto-scroll if user is already at bottom
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    if (isUserAtBottom) {
+      scrollToBottom();
+    }
+  }, [messages, isUserAtBottom]);
+
+  // Auto-focus input on mount
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   const handleSend = async (message?: string) => {
     const messageToSend = message || input.trim();
@@ -58,6 +90,16 @@ export default function ChatPage() {
     setMessages(prev => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
+    
+    // Mark user as at bottom when sending message (they want to see response)
+    setIsUserAtBottom(true);
+    
+    // Focus back to input
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 100);
+
+    const startTime = Date.now();
 
     try {
       const response = await fetch('/api/ai/chat', {
@@ -72,10 +114,16 @@ export default function ChatPage() {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to get response');
+        throw new Error(`API responded with status ${response.status}`);
       }
 
       const { response: reply } = await response.json();
+      const duration = Date.now() - startTime;
+
+      // Only log in development
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`💬 Chat response received in ${(duration / 1000).toFixed(1)}s`);
+      }
 
       const aiMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
@@ -86,6 +134,10 @@ export default function ChatPage() {
 
       setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Chat request failed:', error instanceof Error ? error.message : 'Unknown error');
+      }
+      
       const errorMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
         content: 'Maaf, terjadi kesalahan. Silakan coba lagi dalam beberapa saat.',
@@ -95,6 +147,11 @@ export default function ChatPage() {
       setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
+      
+      // Ensure input is focused after response
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 200);
     }
   };
 
@@ -143,8 +200,12 @@ export default function ChatPage() {
           </CardHeader>
           
           {/* Messages Area */}
-          <CardContent className="flex-1 overflow-hidden p-0">
-            <div className="h-full overflow-y-auto p-4 space-y-4">
+          <CardContent className="flex-1 overflow-hidden p-0 relative">
+            <div 
+              ref={messagesContainerRef}
+              onScroll={handleScroll}
+              className="h-full overflow-y-auto p-4 space-y-4 scroll-smooth"
+            >
               {messages.map((message) => (
                 <div
                   key={message.id}
@@ -167,13 +228,40 @@ export default function ChatPage() {
                     <div className={`p-4 rounded-2xl ${
                       message.isUser
                         ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
-                        : 'bg-white border border-slate-200 text-slate-800 shadow-sm'
+                        : 'bg-card border border-border text-foreground shadow-sm'
                     }`}>
-                      <p className="text-sm leading-relaxed whitespace-pre-wrap">
-                        {message.content}
-                      </p>
+                      <div className={`text-sm leading-relaxed prose prose-sm max-w-none ${
+                        message.isUser 
+                          ? 'prose-invert prose-headings:text-white prose-p:text-white prose-strong:text-white prose-li:text-white' 
+                          : 'prose-slate dark:prose-invert'
+                      }`}>
+                        <ReactMarkdown 
+                          remarkPlugins={[remarkGfm]}
+                          components={{
+                            // Customize rendering untuk list items
+                            ul: ({node, ...props}) => <ul className="list-disc list-inside space-y-1 my-2" {...props} />,
+                            ol: ({node, ...props}) => <ol className="list-decimal list-inside space-y-1 my-2" {...props} />,
+                            li: ({node, ...props}) => <li className="ml-2" {...props} />,
+                            // Customize paragraph spacing
+                            p: ({node, ...props}) => <p className="mb-2 last:mb-0" {...props} />,
+                            // Customize headings
+                            h1: ({node, ...props}) => <h1 className="text-lg font-bold mb-2 mt-3" {...props} />,
+                            h2: ({node, ...props}) => <h2 className="text-base font-bold mb-2 mt-3" {...props} />,
+                            h3: ({node, ...props}) => <h3 className="text-sm font-bold mb-1 mt-2" {...props} />,
+                            // Customize strong/bold
+                            strong: ({node, ...props}) => <strong className="font-bold" {...props} />,
+                            // Customize code blocks
+                            code: ({node, inline, ...props}: any) => 
+                              inline 
+                                ? <code className="bg-muted px-1 py-0.5 rounded text-xs" {...props} />
+                                : <code className="block bg-muted p-2 rounded my-2 text-xs overflow-x-auto" {...props} />,
+                          }}
+                        >
+                          {message.content}
+                        </ReactMarkdown>
+                      </div>
                       <div className={`text-xs mt-2 ${
-                        message.isUser ? 'text-blue-100' : 'text-slate-500'
+                        message.isUser ? 'text-blue-100' : 'text-muted-foreground'
                       }`}>
                         {message.timestamp.toLocaleTimeString([], { 
                           hour: '2-digit', 
@@ -191,10 +279,10 @@ export default function ChatPage() {
                     <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 flex items-center justify-center">
                       <Bot className="h-5 w-5 text-white" />
                     </div>
-                    <div className="p-4 rounded-2xl bg-white border border-slate-200 text-slate-800 shadow-sm">
+                    <div className="p-4 rounded-2xl bg-card border border-border text-foreground shadow-sm">
                       <div className="flex items-center space-x-2">
-                        <Loader2 className="h-4 w-4 animate-spin text-pink-500" />
-                        <span className="text-sm text-slate-600">AI sedang berpikir...</span>
+                        <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                        <span className="text-sm text-muted-foreground">AI sedang berpikir...</span>
                       </div>
                     </div>
                   </div>
@@ -203,10 +291,24 @@ export default function ChatPage() {
               
               <div ref={messagesEndRef} />
             </div>
+            
+            {/* Scroll to Bottom Button */}
+            {showScrollButton && (
+              <button
+                onClick={() => {
+                  setIsUserAtBottom(true);
+                  scrollToBottom('smooth');
+                }}
+                className="absolute bottom-4 right-4 bg-primary text-white p-3 rounded-full shadow-lg hover:bg-primary/90 transition-all duration-200 hover:scale-110 z-10 animate-in fade-in slide-in-from-bottom-2"
+                aria-label="Scroll to bottom"
+              >
+                <ArrowDown className="h-5 w-5" />
+              </button>
+            )}
           </CardContent>
 
           {/* Input Area */}
-          <div className="border-t border-slate-200 p-4 bg-slate-50/50">
+          <div className="border-t border-border p-4 bg-muted/30">
             <div className="flex items-center space-x-3">
               <Input
                 ref={inputRef}
@@ -214,13 +316,13 @@ export default function ChatPage() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Tanyakan apa saja tentang nutrisi dan kesehatan..."
-                className="flex-1 border-slate-300 focus:border-pink-500 focus:ring-pink-500"
+                className="flex-1"
                 disabled={isLoading}
               />
               <Button
                 onClick={() => handleSend()}
                 disabled={!input.trim() || isLoading}
-                className="bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white px-6"
+                className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white px-6"
               >
                 {isLoading ? (
                   <Loader2 className="h-5 w-5 animate-spin" />
@@ -234,12 +336,12 @@ export default function ChatPage() {
 
         {/* Suggestion Prompts */}
         <div className="mt-8">
-          <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+          <Card className="border border-border/50 shadow-sm bg-card">
             <CardContent className="p-6">
               <div className="text-center mb-6">
-                <Sparkles className="h-10 w-10 text-purple-600 mx-auto mb-3" />
-                <h3 className="text-xl font-bold text-slate-800 mb-2">Pertanyaan Populer</h3>
-                <p className="text-slate-600">Klik salah satu untuk memulai percakapan</p>
+                <Sparkles className="h-10 w-10 text-primary mx-auto mb-3" />
+                <h3 className="text-xl font-bold text-foreground mb-2">Pertanyaan Populer</h3>
+                <p className="text-muted-foreground">Klik salah satu untuk memulai percakapan</p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {SUGGESTION_PROMPTS.map((prompt, index) => (
@@ -248,9 +350,9 @@ export default function ChatPage() {
                     variant="outline"
                     onClick={() => handleSend(prompt)}
                     disabled={isLoading}
-                    className="text-left justify-start h-auto p-4 border-slate-300 hover:border-pink-400 hover:bg-pink-50 text-slate-700 hover:text-pink-700"
+                    className="text-left justify-start h-auto p-4 hover:bg-primary/5 hover:border-primary/30 text-foreground hover:text-primary"
                   >
-                    <Apple className="h-4 w-4 mr-3 flex-shrink-0 text-pink-500" />
+                    <Apple className="h-4 w-4 mr-3 flex-shrink-0 text-primary" />
                     <span className="text-sm leading-relaxed">{prompt}</span>
                   </Button>
                 ))}
@@ -261,37 +363,37 @@ export default function ChatPage() {
 
         {/* Features Info */}
         <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="border-0 shadow-lg bg-gradient-to-br from-emerald-50 to-green-50">
+          <Card className="border border-border/50 shadow-sm bg-card hover:shadow-lg transition-all duration-300">
             <CardContent className="p-6 text-center">
-              <div className="w-12 h-12 bg-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-12 h-12 bg-success rounded-full flex items-center justify-center mx-auto mb-4">
                 <Sparkles className="h-6 w-6 text-white" />
               </div>
-              <h4 className="font-semibold text-slate-800 mb-2">Personalisasi AI</h4>
-              <p className="text-sm text-slate-600">
+              <h4 className="font-semibold text-foreground mb-2">Personalisasi AI</h4>
+              <p className="text-sm text-muted-foreground">
                 Jawaban disesuaikan dengan profil kesehatan dan tujuan diet Anda
               </p>
             </CardContent>
           </Card>
           
-          <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-50 to-indigo-50">
+          <Card className="border border-border/50 shadow-sm bg-card hover:shadow-lg transition-all duration-300">
             <CardContent className="p-6 text-center">
-              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-12 h-12 bg-info rounded-full flex items-center justify-center mx-auto mb-4">
                 <MessageCircle className="h-6 w-6 text-white" />
               </div>
-              <h4 className="font-semibold text-slate-800 mb-2">24/7 Available</h4>
-              <p className="text-sm text-slate-600">
+              <h4 className="font-semibold text-foreground mb-2">24/7 Available</h4>
+              <p className="text-sm text-muted-foreground">
                 Konsultasi kapan saja tanpa perlu janji temu dengan ahli gizi
               </p>
             </CardContent>
           </Card>
           
-          <Card className="border-0 shadow-lg bg-gradient-to-br from-purple-50 to-pink-50">
+          <Card className="border border-border/50 shadow-sm bg-card hover:shadow-lg transition-all duration-300">
             <CardContent className="p-6 text-center">
-              <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-12 h-12 bg-accent rounded-full flex items-center justify-center mx-auto mb-4">
                 <Heart className="h-6 w-6 text-white" />
               </div>
-              <h4 className="font-semibold text-slate-800 mb-2">Evidence-Based</h4>
-              <p className="text-sm text-slate-600">
+              <h4 className="font-semibold text-foreground mb-2">Evidence-Based</h4>
+              <p className="text-sm text-muted-foreground">
                 Saran berdasarkan penelitian ilmiah dan panduan nutrisi terbaru
               </p>
             </CardContent>
