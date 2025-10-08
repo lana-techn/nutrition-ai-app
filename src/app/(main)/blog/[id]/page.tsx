@@ -115,19 +115,19 @@ export default function BlogPostDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-teal-50 via-emerald-50 to-green-50">
+      <div className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-12">
           <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-32 mb-8"></div>
+            <div className="h-8 bg-muted rounded w-32 mb-8"></div>
             <div className="max-w-4xl mx-auto">
-              <div className="h-96 bg-gray-200 rounded-lg mb-8"></div>
+              <div className="h-96 bg-muted rounded-lg mb-8"></div>
               <div className="space-y-4">
-                <div className="h-8 bg-gray-200 rounded w-3/4"></div>
-                <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                <div className="h-8 bg-muted rounded w-3/4"></div>
+                <div className="h-4 bg-muted rounded w-1/2"></div>
                 <div className="space-y-2">
-                  <div className="h-4 bg-gray-200 rounded"></div>
-                  <div className="h-4 bg-gray-200 rounded"></div>
-                  <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                  <div className="h-4 bg-muted rounded"></div>
+                  <div className="h-4 bg-muted rounded"></div>
+                  <div className="h-4 bg-muted rounded w-2/3"></div>
                 </div>
               </div>
             </div>
@@ -139,14 +139,14 @@ export default function BlogPostDetailPage() {
 
   if (!post) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-teal-50 via-emerald-50 to-green-50">
+      <div className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-12">
           <div className="text-center py-16">
-            <BookOpen className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-            <h1 className="text-2xl font-bold text-gray-700 mb-2">Article not found</h1>
-            <p className="text-gray-500 mb-6">The article you&apos;re looking for doesn&apos;t exist or has been removed.</p>
+            <BookOpen className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+            <h1 className="text-2xl font-bold text-foreground mb-2">Article not found</h1>
+            <p className="text-muted-foreground mb-6">The article you&apos;re looking for doesn&apos;t exist or has been removed.</p>
             <Link href="/blog">
-              <Button className="bg-teal-500 hover:bg-teal-600 text-white">
+              <Button className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to Blog
               </Button>
@@ -158,12 +158,12 @@ export default function BlogPostDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-emerald-50 to-green-50">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         {/* Navigation */}
         <div className="flex items-center justify-between mb-8">
           <Link href="/blog">
-            <Button variant="ghost" className="text-teal-600 hover:text-teal-700">
+            <Button variant="ghost" className="text-primary hover:text-primary/80">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Blog
             </Button>
@@ -180,33 +180,33 @@ export default function BlogPostDetailPage() {
               </Button>
               
               {showShareMenu && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border z-10">
+                <div className="absolute right-0 mt-2 w-48 bg-card rounded-lg shadow-lg border border-border z-10">
                   <div className="py-2">
                     <button
                       onClick={() => handleShare('twitter')}
-                      className="flex items-center w-full px-4 py-2 text-sm hover:bg-gray-100"
+                      className="flex items-center w-full px-4 py-2 text-sm hover:bg-muted text-foreground"
                     >
-                      <Twitter className="h-4 w-4 mr-2 text-blue-400" />
+                      <Twitter className="h-4 w-4 mr-2 text-info" />
                       Share on Twitter
                     </button>
                     <button
                       onClick={() => handleShare('facebook')}
-                      className="flex items-center w-full px-4 py-2 text-sm hover:bg-gray-100"
+                      className="flex items-center w-full px-4 py-2 text-sm hover:bg-muted text-foreground"
                     >
-                      <Facebook className="h-4 w-4 mr-2 text-blue-600" />
+                      <Facebook className="h-4 w-4 mr-2 text-info" />
                       Share on Facebook
                     </button>
                     <button
                       onClick={() => handleShare('linkedin')}
-                      className="flex items-center w-full px-4 py-2 text-sm hover:bg-gray-100"
+                      className="flex items-center w-full px-4 py-2 text-sm hover:bg-muted text-foreground"
                     >
-                      <Linkedin className="h-4 w-4 mr-2 text-blue-700" />
+                      <Linkedin className="h-4 w-4 mr-2 text-info" />
                       Share on LinkedIn
                     </button>
                     <Separator className="my-1" />
                     <button
                       onClick={() => handleShare('copy')}
-                      className="flex items-center w-full px-4 py-2 text-sm hover:bg-gray-100"
+                      className="flex items-center w-full px-4 py-2 text-sm hover:bg-muted text-foreground"
                     >
                       <Copy className="h-4 w-4 mr-2" />
                       Copy Link
@@ -220,37 +220,37 @@ export default function BlogPostDetailPage() {
               variant="outline" 
               size="sm"
               onClick={toggleBookmark}
-              className={isBookmarked ? 'bg-teal-50 border-teal-200' : ''}
+              className={isBookmarked ? 'bg-primary/10 border-primary/20' : ''}
             >
-              <Bookmark className={`h-4 w-4 ${isBookmarked ? 'fill-teal-500 text-teal-500' : ''}`} />
+              <Bookmark className={`h-4 w-4 ${isBookmarked ? 'fill-primary text-primary' : ''}`} />
             </Button>
           </div>
         </div>
 
         <div className="max-w-4xl mx-auto">
           {/* Article Header */}
-          <Card className="border-0 shadow-xl bg-white mb-8">
+          <Card className="border border-border/50 shadow-sm bg-card hover:shadow-lg transition-all duration-300 mb-8">
             <CardContent className="p-8">
               {/* Category Badge */}
               <div className="mb-4">
-                <Badge className="bg-teal-100 text-teal-700 hover:bg-teal-200">
+                <Badge className="bg-primary/10 text-primary hover:bg-primary/20 border border-primary/20">
                   <Tag className="h-3 w-3 mr-1" />
                   {post.category}
                 </Badge>
               </div>
 
               {/* Title */}
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight">
+              <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-4 leading-tight">
                 {post.title}
               </h1>
 
               {/* Excerpt */}
-              <p className="text-xl text-gray-600 leading-relaxed mb-6">
+              <p className="text-xl text-muted-foreground leading-relaxed mb-6">
                 {post.excerpt}
               </p>
 
               {/* Meta Info */}
-              <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 mb-6">
+              <div className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground mb-6">
                 <div className="flex items-center space-x-2">
                   <User className="h-4 w-4" />
                   <span className="font-medium">{post.author}</span>
@@ -270,17 +270,17 @@ export default function BlogPostDetailPage() {
               </div>
 
               {/* Interaction Buttons */}
-              <div className="flex items-center space-x-4 pt-4 border-t border-gray-100">
+              <div className="flex items-center space-x-4 pt-4 border-t border-border/50">
                 <Button 
                   variant="ghost" 
                   size="sm" 
                   onClick={toggleLike}
-                  className={`${isLiked ? 'text-red-500' : 'text-gray-500'} hover:text-red-500`}
+                  className={`${isLiked ? 'text-error' : 'text-muted-foreground'} hover:text-error`}
                 >
-                  <Heart className={`h-4 w-4 mr-1 ${isLiked ? 'fill-red-500' : ''}`} />
+                  <Heart className={`h-4 w-4 mr-1 ${isLiked ? 'fill-error' : ''}`} />
                   {likeCount} likes
                 </Button>
-                <Button variant="ghost" size="sm" className="text-gray-500">
+                <Button variant="ghost" size="sm" className="text-muted-foreground">
                   <MessageCircle className="h-4 w-4 mr-1" />
                   {Math.floor(Math.random() * 50) + 10} comments
                 </Button>
@@ -290,7 +290,7 @@ export default function BlogPostDetailPage() {
 
           {/* Featured Image */}
           {post.imageUrl && (
-            <Card className="border-0 shadow-xl overflow-hidden bg-white mb-8">
+            <Card className="border border-border/50 shadow-sm bg-card hover:shadow-lg transition-all duration-300 overflow-hidden mb-8">
               <div className="relative h-96 md:h-[500px]">
                 <Image
                   src={post.imageUrl}
@@ -303,11 +303,11 @@ export default function BlogPostDetailPage() {
           )}
 
           {/* Article Content */}
-          <Card className="border-0 shadow-xl bg-white mb-8">
+          <Card className="border border-border/50 shadow-sm bg-card hover:shadow-lg transition-all duration-300 mb-8">
             <CardContent className="p-8">
               <div className="prose prose-lg max-w-none">
                 <div 
-                  className="text-gray-700 leading-relaxed space-y-4"
+                  className="text-foreground leading-relaxed space-y-4"
                   dangerouslySetInnerHTML={{ 
                     __html: `<p>${formatContent(post.content)}</p>`
                   }}
@@ -317,27 +317,27 @@ export default function BlogPostDetailPage() {
           </Card>
 
           {/* Author Bio */}
-          <Card className="border-0 shadow-xl bg-white mb-8">
+          <Card className="border border-border/50 shadow-sm bg-card hover:shadow-lg transition-all duration-300 mb-8">
             <CardContent className="p-8">
               <div className="flex items-start space-x-4">
-                <div className="w-16 h-16 bg-gradient-to-br from-teal-400 to-green-400 rounded-full flex items-center justify-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-primary to-accent rounded-full flex items-center justify-center">
                   <User className="h-8 w-8 text-white" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  <h3 className="text-lg font-semibold text-foreground mb-2">
                     About {post.author}
                   </h3>
-                  <p className="text-gray-600 leading-relaxed mb-4">
+                  <p className="text-muted-foreground leading-relaxed mb-4">
                     {post.author} is a certified nutrition specialist with over 10 years of experience 
                     in helping people achieve their health and wellness goals through evidence-based 
                     nutrition strategies and personalized meal planning.
                   </p>
                   <div className="flex items-center space-x-4">
-                    <Badge variant="secondary" className="bg-green-100 text-green-700">
+                    <Badge variant="secondary" className="bg-success/10 text-success border border-success/20">
                       <CheckCircle className="h-3 w-3 mr-1" />
                       Certified Nutritionist
                     </Badge>
-                    <span className="text-sm text-gray-500">
+                    <span className="text-sm text-muted-foreground">
                       {Math.floor(Math.random() * 50) + 20} articles published
                     </span>
                   </div>
@@ -347,9 +347,9 @@ export default function BlogPostDetailPage() {
           </Card>
 
           {/* Related Articles */}
-          <Card className="border-0 shadow-xl bg-white">
+          <Card className="border border-border/50 shadow-sm bg-card hover:shadow-lg transition-all duration-300">
             <CardHeader>
-              <CardTitle className="flex items-center text-teal-600">
+              <CardTitle className="flex items-center text-primary">
                 <BookOpen className="h-5 w-5 mr-2" />
                 You might also like
               </CardTitle>
@@ -364,10 +364,10 @@ export default function BlogPostDetailPage() {
                 ].map((title, index) => (
                   <div 
                     key={index} 
-                    className="p-4 border border-gray-200 rounded-lg hover:border-teal-300 hover:bg-teal-50 transition-colors cursor-pointer"
+                    className="p-4 border border-border/50 rounded-lg hover:border-primary/30 hover:bg-primary/5 transition-colors cursor-pointer"
                   >
-                    <h4 className="font-medium text-gray-900 mb-2">{title}</h4>
-                    <p className="text-sm text-gray-500">
+                    <h4 className="font-medium text-foreground mb-2">{title}</h4>
+                    <p className="text-sm text-muted-foreground">
                       {Math.floor(Math.random() * 10) + 5} min read • {post.category}
                     </p>
                   </div>
@@ -377,20 +377,20 @@ export default function BlogPostDetailPage() {
           </Card>
 
           {/* Newsletter Signup */}
-          <Card className="border-0 shadow-xl bg-gradient-to-r from-teal-500 to-green-500 mt-8">
+          <Card className="border-0 shadow-xl bg-gradient-to-r from-primary to-accent mt-8">
             <CardContent className="p-8 text-center text-white">
               <BookOpen className="h-12 w-12 mx-auto mb-4" />
               <h3 className="text-2xl font-bold mb-2">Stay Informed</h3>
-              <p className="text-teal-100 mb-6">
+              <p className="text-white/80 mb-6">
                 Get the latest nutrition research and healthy recipes delivered to your inbox.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className="flex-1 px-4 py-2 rounded-lg border-0 focus:ring-2 focus:ring-white text-gray-900"
+                  className="flex-1 px-4 py-2 rounded-lg border-0 focus:ring-2 focus:ring-white text-foreground"
                 />
-                <Button className="bg-white text-teal-600 hover:bg-gray-100 font-semibold">
+                <Button className="bg-white text-primary hover:bg-white/90 font-semibold">
                   Subscribe
                 </Button>
               </div>

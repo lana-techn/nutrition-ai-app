@@ -46,14 +46,6 @@ export default function BlogPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
 
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
-  useEffect(() => {
-    filterPosts();
-  }, [posts, searchTerm, selectedCategory, filterPosts]);
-
   const fetchPosts = async () => {
     try {
       setLoading(true);
@@ -100,6 +92,14 @@ export default function BlogPage() {
     setFilteredPosts(filtered);
   }, [posts, searchTerm, selectedCategory]);
 
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  useEffect(() => {
+    filterPosts();
+  }, [posts, searchTerm, selectedCategory, filterPosts]);
+
   const clearFilters = () => {
     setSearchTerm('');
     setSelectedCategory('');
@@ -127,24 +127,24 @@ export default function BlogPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-emerald-50 to-green-50">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
         <div className="text-center mb-16">
           <div className="flex items-center justify-center mb-6">
             <div className="relative">
-              <div className="w-16 h-16 bg-gradient-to-r from-teal-500 to-green-500 rounded-full flex items-center justify-center shadow-xl">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/20 flex items-center justify-center shadow-lg">
                 <BookOpen className="h-8 w-8 text-white" />
               </div>
-              <div className="absolute -top-1 -right-1 w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center">
+              <div className="absolute -top-1 -right-1 w-6 h-6 bg-accent rounded-full flex items-center justify-center">
                 <Star className="h-3 w-3 text-white" />
               </div>
             </div>
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-4">
+          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent mb-4">
             Nutrition Blog
           </h1>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             Evidence-based nutrition articles written by certified professionals. 
             Stay updated with the latest research and practical tips for healthy living.
           </p>
@@ -152,27 +152,27 @@ export default function BlogPage() {
 
         {/* Featured Articles */}
         <div className="mb-16">
-          <h2 className="text-3xl font-bold text-slate-900 mb-8 text-center">Featured Articles</h2>
+          <h2 className="text-3xl font-bold text-foreground mb-8 text-center">Featured Articles</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {FEATURED_POSTS.map((post) => (
-              <Card key={post.id} className="border-0 shadow-xl bg-white/80 backdrop-blur-sm hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 cursor-pointer group">
-                <div className="h-48 bg-gradient-to-br from-teal-100 to-green-100 rounded-t-lg flex items-center justify-center">
-                  <BookOpen className="h-16 w-16 text-teal-400 group-hover:text-teal-600 transition-colors" />
+              <Card key={post.id} className="border border-border/50 shadow-sm bg-card hover:shadow-lg transition-all duration-300 transform hover:-translate-y-2 cursor-pointer group">
+                <div className="h-48 bg-gradient-to-br from-primary/10 to-accent/10 rounded-t-lg flex items-center justify-center">
+                  <BookOpen className="h-16 w-16 text-primary/40 group-hover:text-primary transition-colors" />
                 </div>
                 <CardContent className="p-6">
                   <div className="flex items-center space-x-2 mb-3">
-                    <span className="px-2 py-1 bg-teal-100 text-teal-700 text-xs font-medium rounded-full">
+                    <span className="px-2 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full border border-primary/20">
                       {post.category}
                     </span>
-                    <div className="flex items-center space-x-1 text-slate-500 text-xs">
+                    <div className="flex items-center space-x-1 text-muted-foreground text-xs">
                       <Clock className="h-3 w-3" />
                       <span>{post.readTime} min read</span>
                     </div>
                   </div>
-                  <h3 className="font-bold text-lg text-slate-900 mb-2 group-hover:text-teal-600 transition-colors line-clamp-2">
+                  <h3 className="font-bold text-lg text-foreground mb-2 group-hover:text-primary transition-colors line-clamp-2">
                     {post.title}
                   </h3>
-                  <p className="text-slate-600 text-sm line-clamp-3 leading-relaxed">
+                  <p className="text-muted-foreground text-sm line-clamp-3 leading-relaxed">
                     {post.excerpt}
                   </p>
                 </CardContent>
@@ -182,24 +182,24 @@ export default function BlogPage() {
         </div>
 
         {/* Search and Filters */}
-        <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm mb-8">
+        <Card className="border border-border/50 shadow-sm bg-card mb-8">
           <CardContent className="p-6">
             <div className="flex flex-col md:flex-row gap-4">
               {/* Search */}
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-slate-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                 <Input
                   placeholder="Search articles..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 border-slate-300 focus:border-teal-500 focus:ring-teal-500"
+                  className="pl-10"
                 />
               </div>
 
               {/* Category Filter */}
               <div className="w-full md:w-64">
                 <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                  <SelectTrigger className="border-slate-300 focus:border-teal-500 focus:ring-teal-500">
+                  <SelectTrigger>
                     <SelectValue placeholder="All Categories" />
                   </SelectTrigger>
                   <SelectContent>
@@ -227,7 +227,7 @@ export default function BlogPage() {
 
         {/* Results Summary */}
         <div className="flex items-center justify-between mb-6">
-          <p className="text-slate-600">
+          <p className="text-muted-foreground">
             Showing <span className="font-semibold">{filteredPosts.length}</span> articles
             {searchTerm && (
               <span> for &quot;<span className="font-semibold">{searchTerm}</span>&quot;</span>
@@ -242,14 +242,14 @@ export default function BlogPage() {
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[...Array(6)].map((_, i) => (
-              <Card key={i} className="border-0 shadow-lg animate-pulse">
-                <div className="h-48 bg-slate-200 rounded-t-lg"></div>
+              <Card key={i} className="border border-border/50 shadow-sm animate-pulse">
+                <div className="h-48 bg-muted rounded-t-lg"></div>
                 <CardContent className="p-6">
-                  <div className="h-4 bg-slate-200 rounded mb-2"></div>
-                  <div className="h-3 bg-slate-200 rounded mb-4"></div>
+                  <div className="h-4 bg-muted rounded mb-2"></div>
+                  <div className="h-3 bg-muted rounded mb-4"></div>
                   <div className="flex items-center space-x-4">
-                    <div className="h-3 bg-slate-200 rounded w-20"></div>
-                    <div className="h-3 bg-slate-200 rounded w-24"></div>
+                    <div className="h-3 bg-muted rounded w-20"></div>
+                    <div className="h-3 bg-muted rounded w-24"></div>
                   </div>
                 </CardContent>
               </Card>
@@ -257,12 +257,12 @@ export default function BlogPage() {
           </div>
         ) : filteredPosts.length === 0 ? (
           <div className="text-center py-16">
-            <BookOpen className="h-16 w-16 text-slate-400 mx-auto mb-6" />
-            <h3 className="text-2xl font-semibold text-slate-700 mb-2">No articles found</h3>
-            <p className="text-slate-500 mb-6">
+            <BookOpen className="h-16 w-16 text-muted-foreground mx-auto mb-6" />
+            <h3 className="text-2xl font-semibold text-foreground mb-2">No articles found</h3>
+            <p className="text-muted-foreground mb-6">
               Try adjusting your search terms or browse all categories.
             </p>
-            <Button onClick={clearFilters} className="bg-teal-500 hover:bg-teal-600 text-white">
+            <Button onClick={clearFilters} className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white">
               View All Articles
             </Button>
           </div>
@@ -270,7 +270,7 @@ export default function BlogPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredPosts.map((post) => (
               <Link key={post.id} href={`/blog/${post.id}`}>
-                <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer group overflow-hidden bg-white h-full">
+                <Card className="border border-border/50 shadow-sm bg-card hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 cursor-pointer group overflow-hidden h-full">
                   <div className="relative h-48 overflow-hidden">
                     {post.imageUrl ? (
                       <Image
@@ -280,12 +280,12 @@ export default function BlogPage() {
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-teal-100 to-green-100 flex items-center justify-center">
-                        <BookOpen className="h-16 w-16 text-teal-300" />
+                      <div className="w-full h-full bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center">
+                        <BookOpen className="h-16 w-16 text-primary/30" />
                       </div>
                     )}
                     <div className="absolute top-3 left-3">
-                      <span className="px-2 py-1 bg-white/90 backdrop-blur-sm text-teal-700 text-xs font-medium rounded-full">
+                      <span className="px-2 py-1 bg-card/90 backdrop-blur-sm text-primary text-xs font-medium rounded-full border border-primary/20">
                         {post.category}
                       </span>
                     </div>
@@ -293,15 +293,15 @@ export default function BlogPage() {
                   
                   <CardContent className="p-6 flex-1 flex flex-col">
                     <div className="flex-1">
-                      <h3 className="font-bold text-lg text-slate-900 mb-3 group-hover:text-teal-600 transition-colors line-clamp-2">
+                      <h3 className="font-bold text-lg text-foreground mb-3 group-hover:text-primary transition-colors line-clamp-2">
                         {post.title}
                       </h3>
-                      <p className="text-slate-600 text-sm line-clamp-3 leading-relaxed mb-4">
+                      <p className="text-muted-foreground text-sm line-clamp-3 leading-relaxed mb-4">
                         {post.excerpt}
                       </p>
                     </div>
                     
-                    <div className="flex items-center justify-between text-xs text-slate-500 pt-4 border-t border-slate-100">
+                    <div className="flex items-center justify-between text-xs text-muted-foreground pt-4 border-t border-border/50">
                       <div className="flex items-center space-x-4">
                         <div className="flex items-center space-x-1">
                           <User className="h-3 w-3" />
@@ -326,25 +326,25 @@ export default function BlogPage() {
 
         {/* Newsletter Signup */}
         <div className="mt-20">
-          <Card className="border-0 shadow-2xl bg-gradient-to-r from-teal-500 to-green-500">
+          <Card className="border-0 shadow-2xl bg-gradient-to-r from-primary to-accent">
             <CardContent className="p-12 text-center">
               <div className="max-w-2xl mx-auto">
                 <TrendingUp className="h-16 w-16 text-white mx-auto mb-6" />
                 <h3 className="text-3xl font-bold text-white mb-4">Stay Updated</h3>
-                <p className="text-teal-100 text-lg mb-8 leading-relaxed">
+                <p className="text-white/80 text-lg mb-8 leading-relaxed">
                   Get the latest nutrition tips, research updates, and healthy recipes delivered straight to your inbox every week.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
                   <Input
                     type="email"
                     placeholder="Enter your email"
-                    className="bg-white border-0 focus:ring-2 focus:ring-white flex-1"
+                    className="bg-white border-0 focus:ring-2 focus:ring-white flex-1 text-foreground"
                   />
-                  <Button className="bg-white text-teal-600 hover:bg-teal-50 font-semibold px-8">
+                  <Button className="bg-white text-primary hover:bg-white/90 font-semibold px-8">
                     Subscribe
                   </Button>
                 </div>
-                <p className="text-teal-100 text-sm mt-4">
+                <p className="text-white/70 text-sm mt-4">
                   Join 10,000+ health-conscious individuals. Unsubscribe anytime.
                 </p>
               </div>
