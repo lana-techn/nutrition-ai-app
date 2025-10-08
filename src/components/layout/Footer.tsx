@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Apple, Heart, Mail, Github, Twitter } from 'lucide-react';
+import { Apple, Heart, Instagram, Mail } from 'lucide-react';
 
 export default function Footer() {
   return (
@@ -16,11 +16,11 @@ export default function Footer() {
               Your AI-powered nutrition assistant helping you make healthier choices every day.
             </p>
             <div className="flex space-x-3">
-              <a href="#" className="text-slate-400 hover:text-green-400 transition-colors">
-                <Twitter className="h-5 w-5" />
+              <a href="https://www.instagram.com/lana.dev_/" className="text-slate-400 hover:text-green-400 transition-colors">
+                <Instagram className="h-5 w-5" />
               </a>
-              <a href="#" className="text-slate-400 hover:text-green-400 transition-colors">
-                <Github className="h-5 w-5" />
+              <a href="https://www.instagram.com/_fitri.ayu/" className="text-slate-400 hover:text-green-400 transition-colors">
+                <Instagram className="h-5 w-5" />
               </a>
               <a href="#" className="text-slate-400 hover:text-green-400 transition-colors">
                 <Mail className="h-5 w-5" />
@@ -68,17 +68,7 @@ export default function Footer() {
                 <Link href="/recommendations" className="hover:text-green-400 transition-colors">
                   Personal Recommendations
                 </Link>
-              </li>
-              <li>
-                <a href="#" className="hover:text-green-400 transition-colors">
-                  API Documentation
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-green-400 transition-colors">
-                  Help Center
-                </a>
-              </li>
+              </li>/
             </ul>
           </div>
 
@@ -89,11 +79,6 @@ export default function Footer() {
               <li>
                 <a href="#" className="hover:text-green-400 transition-colors">
                   About Us
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:text-green-400 transition-colors">
-                  Privacy Policy
                 </a>
               </li>
               <li>
@@ -112,11 +97,11 @@ export default function Footer() {
 
         <div className="border-t border-slate-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-slate-400 text-sm">
-            © 2024 NutriAI. All rights reserved. Made with{" "}
+            © 2025 NutriAI. All rights reserved. Made with{" "}
             <Heart className="h-4 w-4 inline text-red-400" /> for your health.
           </p>
           <p className="text-slate-400 text-sm mt-2 md:mt-0">
-            Powered by AI • Designed for Wellness
+            Powered by AI • Designed by Lana
           </p>
         </div>
       </div>
