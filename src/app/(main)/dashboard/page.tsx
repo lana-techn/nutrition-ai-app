@@ -61,15 +61,15 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-7xl">
         {/* Header */}
-        <div className="mb-12">
-          <div className="flex items-center justify-between">
+        <div className="mb-8 sm:mb-12">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-4xl font-bold text-foreground mb-3">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-2 sm:mb-3">
                 Welcome back, {user.firstName || user.fullName || 'there'}! 👋
               </h1>
-              <p className="text-xl text-muted-foreground">
+              <p className="text-base sm:text-lg lg:text-xl text-muted-foreground">
                 Here&apos;s your nutrition journey overview
               </p>
             </div>
@@ -81,31 +81,31 @@ export default function DashboardPage() {
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-12">
           <Card className="border border-border/50 shadow-sm bg-card hover:shadow-md transition-all duration-200 group">
-            <CardContent className="p-6">
+            <CardContent className="p-4 sm:p-6">
               <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-muted-foreground text-sm font-medium">Today&apos;s Calories</p>
-                  <p className="text-3xl font-bold text-foreground mt-2">1,847</p>
+                <div className="flex-1 min-w-0">
+                  <p className="text-muted-foreground text-xs sm:text-sm font-medium">Today&apos;s Calories</p>
+                  <p className="text-2xl sm:text-3xl font-bold text-foreground mt-1 sm:mt-2">1,847</p>
                   <p className="text-xs text-muted-foreground mt-1">of 2,200 goal</p>
-                  <div className="w-full bg-secondary rounded-full h-1.5 mt-3">
+                  <div className="w-full bg-secondary rounded-full h-1.5 mt-2 sm:mt-3">
                     <div className="bg-primary h-1.5 rounded-full" style={{ width: '84%' }}></div>
                   </div>
                 </div>
-                <div className="bg-primary/10 p-3 rounded-full group-hover:bg-primary/20 transition-colors">
-                  <Utensils className="h-6 w-6 text-primary" />
+                <div className="bg-primary/10 p-2 sm:p-3 rounded-full group-hover:bg-primary/20 transition-colors flex-shrink-0">
+                  <Utensils className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
           <Card className="border border-border/50 shadow-sm bg-card hover:shadow-md transition-all duration-200 group">
-            <CardContent className="p-6">
+            <CardContent className="p-4 sm:p-6">
               <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-muted-foreground text-sm font-medium">Streak Days</p>
-                  <p className="text-3xl font-bold text-foreground mt-2">12</p>
+                <div className="flex-1 min-w-0">
+                  <p className="text-muted-foreground text-xs sm:text-sm font-medium">Streak Days</p>
+                  <p className="text-2xl sm:text-3xl font-bold text-foreground mt-1 sm:mt-2">12</p>
                   <p className="text-xs text-success mt-1">Keep it up! 🔥</p>
                   <div className="flex items-center mt-2">
                     <div className="flex space-x-1">
@@ -115,19 +115,19 @@ export default function DashboardPage() {
                     </div>
                   </div>
                 </div>
-                <div className="bg-success/10 p-3 rounded-full group-hover:bg-success/20 transition-colors">
-                  <TrendingUp className="h-6 w-6 text-success" />
+                <div className="bg-success/10 p-2 sm:p-3 rounded-full group-hover:bg-success/20 transition-colors flex-shrink-0">
+                  <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 text-success" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
           <Card className="border border-border/50 shadow-sm bg-card hover:shadow-md transition-all duration-200 group">
-            <CardContent className="p-6">
+            <CardContent className="p-4 sm:p-6">
               <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-muted-foreground text-sm font-medium">Weight Goal</p>
-                  <p className="text-3xl font-bold text-foreground mt-2">-2.3 kg</p>
+                <div className="flex-1 min-w-0">
+                  <p className="text-muted-foreground text-xs sm:text-sm font-medium">Weight Goal</p>
+                  <p className="text-2xl sm:text-3xl font-bold text-foreground mt-1 sm:mt-2">-2.3 kg</p>
                   <p className="text-xs text-warning mt-1">since last month</p>
                   <div className="flex items-center mt-2 space-x-2">
                     <div className="text-xs px-2 py-1 bg-warning/10 text-warning rounded-full">
@@ -135,111 +135,111 @@ export default function DashboardPage() {
                     </div>
                   </div>
                 </div>
-                <div className="bg-warning/10 p-3 rounded-full group-hover:bg-warning/20 transition-colors">
-                  <Target className="h-6 w-6 text-warning" />
+                <div className="bg-warning/10 p-2 sm:p-3 rounded-full group-hover:bg-warning/20 transition-colors flex-shrink-0">
+                  <Target className="h-5 w-5 sm:h-6 sm:w-6 text-warning" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
           <Card className="border border-border/50 shadow-sm bg-card hover:shadow-md transition-all duration-200 group">
-            <CardContent className="p-6">
+            <CardContent className="p-4 sm:p-6">
               <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-muted-foreground text-sm font-medium">Health Score</p>
-                  <p className="text-3xl font-bold text-foreground mt-2">85</p>
+                <div className="flex-1 min-w-0">
+                  <p className="text-muted-foreground text-xs sm:text-sm font-medium">Health Score</p>
+                  <p className="text-2xl sm:text-3xl font-bold text-foreground mt-1 sm:mt-2">85</p>
                   <p className="text-xs text-success mt-1">Excellent! 💚</p>
-                  <div className="w-full bg-secondary rounded-full h-1.5 mt-3">
+                  <div className="w-full bg-secondary rounded-full h-1.5 mt-2 sm:mt-3">
                     <div className="bg-gradient-to-r from-success to-primary h-1.5 rounded-full" style={{ width: '85%' }}></div>
                   </div>
                 </div>
-                <div className="bg-red-500/10 p-3 rounded-full group-hover:bg-red-500/20 transition-colors">
-                  <Heart className="h-6 w-6 text-red-500" />
+                <div className="bg-red-500/10 p-2 sm:p-3 rounded-full group-hover:bg-red-500/20 transition-colors flex-shrink-0">
+                  <Heart className="h-5 w-5 sm:h-6 sm:w-6 text-red-500" />
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
           {/* Quick Actions */}
           <div className="lg:col-span-2">
             <Card className="border border-border/50 shadow-sm bg-card">
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-3">
-                  <div className="bg-primary/10 p-2 rounded-lg">
-                    <Target className="h-5 w-5 text-primary" />
+              <CardHeader className="px-4 sm:px-6">
+                <CardTitle className="flex items-center space-x-2 sm:space-x-3 text-base sm:text-lg">
+                  <div className="bg-primary/10 p-1.5 sm:p-2 rounded-lg">
+                    <Target className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
                   </div>
                   <span className="text-foreground">Quick Actions</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent className="p-6">
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <CardContent className="p-4 sm:p-6">
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
                   <Button
                     asChild
                     variant="outline"
-                    className="h-28 flex-col space-y-3 border-border/50 hover:bg-accent hover:text-accent-foreground hover:border-primary/20 transition-all duration-200 group"
+                    className="h-20 sm:h-24 lg:h-28 flex-col space-y-1.5 sm:space-y-2 lg:space-y-3 border-border/50 hover:bg-accent hover:text-accent-foreground hover:border-primary/20 transition-all duration-200 group"
                   >
-                    <Link href="/analyze" className="flex flex-col items-center space-y-2">
-                      <div className="bg-primary/10 p-3 rounded-lg group-hover:bg-primary/20 transition-colors">
-                        <Camera className="h-6 w-6 text-primary" />
+                    <Link href="/analyze" className="flex flex-col items-center justify-center">
+                      <div className="bg-primary/10 p-2 sm:p-2.5 lg:p-3 rounded-lg group-hover:bg-primary/20 transition-colors">
+                        <Camera className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-primary" />
                       </div>
-                      <span className="text-sm font-medium">Analyze Food</span>
+                      <span className="text-xs sm:text-sm font-medium">Analyze Food</span>
                     </Link>
                   </Button>
 
                   <Button
                     asChild
                     variant="outline"
-                    className="h-24 flex-col space-y-2 border-blue-200 hover:bg-blue-50"
+                    className="h-20 sm:h-24 flex-col space-y-1.5 sm:space-y-2 border-blue-200 hover:bg-blue-50"
                   >
-                    <Link href="/meal-planner">
-                      <Utensils className="h-6 w-6 text-blue-600" />
-                      <span className="text-sm">Meal Plan</span>
+                    <Link href="/meal-planner" className="flex flex-col items-center justify-center">
+                      <Utensils className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-blue-600" />
+                      <span className="text-xs sm:text-sm">Meal Plan</span>
                     </Link>
                   </Button>
 
                   <Button
                     asChild
                     variant="outline"
-                    className="h-24 flex-col space-y-2 border-orange-200 hover:bg-orange-50"
+                    className="h-20 sm:h-24 flex-col space-y-1.5 sm:space-y-2 border-orange-200 hover:bg-orange-50"
                   >
-                    <Link href="/recipes">
-                      <BookOpen className="h-6 w-6 text-orange-600" />
-                      <span className="text-sm">Recipes</span>
+                    <Link href="/recipes" className="flex flex-col items-center justify-center">
+                      <BookOpen className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-orange-600" />
+                      <span className="text-xs sm:text-sm">Recipes</span>
                     </Link>
                   </Button>
 
                   <Button
                     asChild
                     variant="outline"
-                    className="h-24 flex-col space-y-2 border-purple-200 hover:bg-purple-50"
+                    className="h-20 sm:h-24 flex-col space-y-1.5 sm:space-y-2 border-purple-200 hover:bg-purple-50"
                   >
-                    <Link href="/chat">
-                      <MessageCircle className="h-6 w-6 text-purple-600" />
-                      <span className="text-sm">AI Chat</span>
+                    <Link href="/chat" className="flex flex-col items-center justify-center">
+                      <MessageCircle className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-purple-600" />
+                      <span className="text-xs sm:text-sm">AI Chat</span>
                     </Link>
                   </Button>
 
                   <Button
                     asChild
                     variant="outline"
-                    className="h-24 flex-col space-y-2 border-teal-200 hover:bg-teal-50"
+                    className="h-20 sm:h-24 flex-col space-y-1.5 sm:space-y-2 border-teal-200 hover:bg-teal-50"
                   >
-                    <Link href="/recommendations">
-                      <TrendingUp className="h-6 w-6 text-teal-600" />
-                      <span className="text-sm">Get Tips</span>
+                    <Link href="/recommendations" className="flex flex-col items-center justify-center">
+                      <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-teal-600" />
+                      <span className="text-xs sm:text-sm">Get Tips</span>
                     </Link>
                   </Button>
 
                   <Button
                     asChild
                     variant="outline"
-                    className="h-24 flex-col space-y-2 border-slate-200 hover:bg-slate-50"
+                    className="h-20 sm:h-24 flex-col space-y-1.5 sm:space-y-2 border-slate-200 hover:bg-slate-50"
                   >
-                    <Link href="/profile">
-                      <Settings className="h-6 w-6 text-slate-600" />
-                      <span className="text-sm">Settings</span>
+                    <Link href="/profile" className="flex flex-col items-center justify-center">
+                      <Settings className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-slate-600" />
+                      <span className="text-xs sm:text-sm">Settings</span>
                     </Link>
                   </Button>
                 </div>

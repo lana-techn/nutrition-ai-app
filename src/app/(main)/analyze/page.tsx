@@ -147,30 +147,30 @@ export default function AnalyzePage() {
   };
 
   return (
-    <div className="min-h-screen bg-background py-12">
-      <div className="container mx-auto px-4 max-w-6xl">
+    <div className="min-h-screen bg-background py-6 sm:py-8 lg:py-12">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center mb-6">
+        <div className="text-center mb-8 sm:mb-12">
+          <div className="flex items-center justify-center mb-4 sm:mb-6">
             <div className="relative">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/20 flex items-center justify-center">
-                <Sparkles className="h-8 w-8 text-primary" />
+              <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/20 flex items-center justify-center">
+                <Sparkles className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
               </div>
-              <div className="absolute -top-1 -right-1 w-6 h-6 bg-accent rounded-full flex items-center justify-center">
-                <Zap className="h-3 w-3 text-white" />
+              <div className="absolute -top-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 bg-accent rounded-full flex items-center justify-center">
+                <Zap className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-white" />
               </div>
             </div>
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent mb-3 sm:mb-4">
             AI Food Analysis
           </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed px-4">
             Upload a photo of your meal and get instant nutritional insights powered by advanced AI technology. 
             Discover calories, macros, and personalized recommendations in seconds.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
           {/* Upload Section */}
           <Card className="border border-border/50 shadow-lg bg-card/80 backdrop-blur-sm hover:shadow-xl transition-all duration-300">
             <CardHeader>
@@ -529,7 +529,7 @@ export default function AnalyzePage() {
         </div>
 
         {/* Tips Section */}
-        <div className="mt-16">
+        <div className="mt-10 sm:mt-12 lg:mt-16">
           <Card className="border-0 shadow-xl bg-gradient-to-r from-slate-50 to-blue-50">
             <CardContent className="p-8">
               <div className="text-center mb-8">
