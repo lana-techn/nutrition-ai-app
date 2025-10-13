@@ -7,7 +7,7 @@ import { HoveredLink, Menu, MenuItem, ProductItem } from "@/components/ui/navbar
 import { cn } from "@/lib/utils";
 import { UserButton, SignedIn, SignedOut, SignInButton, SignUpButton } from '@clerk/nextjs';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
-import { Apple, MenuIcon, X } from 'lucide-react';
+import { Apple, MenuIcon, X, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default function ModernNavbar() {
@@ -72,6 +72,15 @@ function Navbar({ className }: { className?: string }) {
                       </div>
                     </div>
                   </HoveredLink>
+                  <HoveredLink href="/journal-search">
+                    <div className="flex items-center space-x-2">
+                      <span>🔍</span>
+                      <div>
+                        <div className="font-medium">Journal Search</div>
+                        <div className="text-xs text-muted-foreground">Search academic papers</div>
+                      </div>
+                    </div>
+                  </HoveredLink>
                 </div>
               </MenuItem>
               
@@ -88,6 +97,12 @@ function Navbar({ className }: { className?: string }) {
                     href="/blog"
                     src="/api/placeholder/400/200"
                     description="Expert articles on nutrition, health tips, and wellness guidance."
+                  />
+                  <ProductItem
+                    title="Journal Search"
+                    href="/journal-search"
+                    src="/api/placeholder/400/200"
+                    description="Search academic papers and journals on health, nutrition, and medical research."
                   />
                   <ProductItem
                     title="Meal Analysis"
@@ -271,6 +286,17 @@ function Navbar({ className }: { className?: string }) {
                     <div>
                       <div className="font-medium text-foreground">Nutrition Blog</div>
                       <div className="text-sm text-muted-foreground">Expert health tips</div>
+                    </div>
+                  </Link>
+                  <Link 
+                    href="/journal-search" 
+                    onClick={closeMobileMenu}
+                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent transition-colors"
+                  >
+                    <span className="text-2xl">🔍</span>
+                    <div>
+                      <div className="font-medium text-foreground">Journal Search</div>
+                      <div className="text-sm text-muted-foreground">Search academic papers</div>
                     </div>
                   </Link>
                 </div>
