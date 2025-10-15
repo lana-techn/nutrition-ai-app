@@ -299,7 +299,7 @@ const JournalSearchPage = () => {
           </CardHeader>
           
           <CardContent>
-            <div className="relative mb-4">
+            <div className="relative mb-4 z-10">
               <div className="relative">
                 <Input
                   ref={searchInputRef}
@@ -348,8 +348,7 @@ const JournalSearchPage = () => {
 
             {/* Suggestions Dropdown */}
             {suggestions && suggestions.length > 0 && query && !hasSearched && (
-              <div className="relative z-50">
-                <div className="absolute w-full bg-popover border border-orange-200/50 dark:border-orange-800/50 rounded-lg shadow-lg mt-1 dark:bg-card max-h-96 overflow-y-auto">
+              <div className="absolute z-[100] w-full left-0 right-0 bg-popover border border-orange-200/50 dark:border-orange-800/50 rounded-lg shadow-lg mt-1 dark:bg-card max-h-96 overflow-y-auto">
                 {suggestions.map((suggestion) => (
                   <div
                     key={suggestion.paperId || suggestion.id}
@@ -380,7 +379,6 @@ const JournalSearchPage = () => {
                     </div>
                   </div>
                 ))}
-                </div>
               </div>
             )}
 
