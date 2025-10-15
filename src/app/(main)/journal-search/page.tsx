@@ -264,29 +264,33 @@ const JournalSearchPage = () => {
   if (!hasJournalSearchAccess(user.id)) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-background to-amber-50 dark:from-orange-950/20 dark:via-background dark:to-amber-950/20 p-8">
-        <Card className="max-w-md w-full border-orange-200 dark:border-orange-800">
+        <Card className="max-w-md w-full border-orange-200/50 dark:border-orange-800/50 shadow-lg">
           <CardHeader>
-            <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-              <AlertCircle className="w-8 h-8 text-red-600 dark:text-red-400" />
+            <div className="w-16 h-16 bg-gradient-to-br from-orange-100 to-amber-100 dark:from-orange-900/40 dark:to-amber-900/40 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
+              <Lock className="w-8 h-8 text-orange-600 dark:text-orange-400" />
             </div>
-            <CardTitle className="text-center text-2xl text-red-600 dark:text-red-400">Access Restricted</CardTitle>
-            <CardDescription className="text-center">
+            <CardTitle className="text-center text-2xl text-foreground">Access Restricted</CardTitle>
+            <CardDescription className="text-center text-muted-foreground">
               You don&apos;t have permission to access the Journal Search feature
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
-              <p className="text-sm text-amber-900 dark:text-amber-200 mb-2">
-                <strong>Note:</strong> This feature is currently in beta and available to selected users only.
-              </p>
-              <p className="text-xs text-amber-700 dark:text-amber-300">
-                If you believe you should have access, please contact the administrator.
-              </p>
+            <div className="p-4 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/30 dark:to-amber-950/30 rounded-lg border border-orange-200/50 dark:border-orange-800/50">
+              <div className="flex items-start space-x-3">
+                <AlertCircle className="w-5 h-5 text-orange-600 dark:text-orange-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm text-orange-900 dark:text-orange-200 mb-2 font-medium">
+                    This feature is currently in beta
+                  </p>
+                  <p className="text-xs text-orange-700 dark:text-orange-300/90">
+                    The Journal Search feature is available to selected users only. If you believe you should have access, please contact the administrator.
+                  </p>
+                </div>
+              </div>
             </div>
             <Button 
               onClick={() => router.push('/dashboard')}
-              className="w-full"
-              variant="outline"
+              className="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-md"
             >
               <ChevronRight className="w-4 h-4 mr-2 rotate-180" />
               Back to Dashboard
