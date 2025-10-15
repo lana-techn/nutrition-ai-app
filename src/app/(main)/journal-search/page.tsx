@@ -44,6 +44,7 @@ const JournalSearchPage = () => {
   const [error, setError] = useState<string>('');
   const [suggestions, setSuggestions] = useState<SemanticScholarPaper[]>([]);
   const [showFilters, setShowFilters] = useState<boolean>(false);
+  const [hasSearched, setHasSearched] = useState<boolean>(false);
   const [lastSearchTime, setLastSearchTime] = useState<number>(0);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -80,6 +81,8 @@ const JournalSearchPage = () => {
 
     setLoading(true);
     setError('');
+    setHasSearched(true);
+    setSuggestions([]);
 
     try {
       const searchParams = new URLSearchParams();
@@ -145,7 +148,7 @@ const JournalSearchPage = () => {
   };
 
   const handleAutocomplete = async (value: string) => {
-    if (value.length < 2) {
+    if (value.length < 2 || hasSearched) {
       setSuggestions([]);
       return;
     }
@@ -160,6 +163,9 @@ const JournalSearchPage = () => {
           console.warn('Autocomplete API returned non-array:', suggestions);
           setSuggestions([]);
         }
+      } else if (response.status === 400 || response.status === 500) {
+        // Handle validation or API errors gracefully by clearing suggestions
+        setSuggestions([]);
       } else {
         console.error('Autocomplete API returned non-200 status:', response.status);
         setSuggestions([]);
@@ -195,6 +201,8 @@ const JournalSearchPage = () => {
 
   const handleQuickSearch = (term: string) => {
     setQuery(term);
+    setHasSearched(false); // Reset search state for quick search
+    setSuggestions([]); // Clear suggestions immediately
     setTimeout(() => handleSearch(), 100);
   };
 
@@ -277,7 +285,7 @@ const JournalSearchPage = () => {
       {/* Main Content */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Search Section */}
-        <Card className="mb-8 shadow-lg border-orange-100/50 dark:border-orange-900/30 dark:bg-card/50">
+        <Card className="mb-8 shadow-lg border-orange-100/50 dark:border-orange-900/30 dark:bg-card/50 overflow-hidden">
           <CardHeader className="pb-4">
             <CardTitle className="flex items-center space-x-3">
               <div className="p-2 bg-orange-100 dark:bg-orange-900/50 rounded-lg">
@@ -292,65 +300,86 @@ const JournalSearchPage = () => {
           
           <CardContent>
             <div className="relative mb-4">
-              <Input
-                ref={searchInputRef}
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                placeholder="Search for research topics, authors, or keywords..."
-                className="w-full pl-12 pr-20 h-12 text-lg border-orange-200/50 focus:border-orange-500 focus:ring-orange-500 dark:bg-background dark:border-orange-800/50 dark:text-foreground dark:placeholder:text-muted-foreground"
-              />
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-muted-foreground w-5 h-5" />
-              
-              <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
-                <Button
-                  onClick={() => setShowFilters(!showFilters)}
-                  variant="outline"
-                  size="sm"
-                  className="border-orange-200/50 text-orange-600 hover:bg-orange-50 dark:border-orange-800/50 dark:text-orange-400 dark:hover:bg-orange-950/20"
-                >
-                  <Filter className="w-4 h-4" />
-                </Button>
-                <Button 
-                  onClick={() => handleSearch()}
-                  disabled={loading || !query.trim()}
-                  className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-lg"
-                >
-                  {loading ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                      Searching...
-                    </>
-                  ) : (
-                    <>
-                      Search
-                      <Sparkles className="w-4 h-4 ml-2" />
-                    </>
-                  )}
-                </Button>
+              <div className="relative">
+                <Input
+                  ref={searchInputRef}
+                  type="text"
+                  value={query}
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                    setHasSearched(false); // Reset search state when user starts typing
+                  }}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                  placeholder="Search for research topics, authors, or keywords..."
+                  className="w-full pl-12 pr-32 h-12 text-lg border-orange-200/50 focus:border-orange-500 focus:ring-orange-500 dark:bg-background dark:border-orange-800/50 dark:text-foreground dark:placeholder:text-muted-foreground"
+                />
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-muted-foreground w-5 h-5" />
+                
+                <div className="absolute right-2 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
+                  <Button
+                    onClick={() => setShowFilters(!showFilters)}
+                    variant="outline"
+                    size="sm"
+                    className="border-orange-200/50 text-orange-600 hover:bg-orange-50 dark:border-orange-800/50 dark:text-orange-400 dark:hover:bg-orange-950/20"
+                  >
+                    <Filter className="w-4 h-4" />
+                  </Button>
+                  <Button 
+                    onClick={() => handleSearch()}
+                    disabled={loading || !query.trim()}
+                    className="bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-lg whitespace-nowrap"
+                  >
+                    {loading ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                        <span className="hidden sm:inline">Searching...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="hidden sm:inline">Search</span>
+                        <span className="sm:hidden">🔍</span>
+                        <Sparkles className="w-4 h-4 ml-2 hidden sm:inline" />
+                      </>
+                    )}
+                  </Button>
+                </div>
               </div>
             </div>
 
             {/* Suggestions Dropdown */}
-            {suggestions && suggestions.length > 0 && query && (
-              <div className="absolute z-50 w-full bg-popover border border-orange-200/50 dark:border-orange-800/50 rounded-lg shadow-lg mt-1 dark:bg-card">
-                {suggestions.map((suggestion) => (
-                  <div
-                    key={suggestion.paperId || suggestion.id}
-                    className="px-4 py-3 hover:bg-orange-50 dark:hover:bg-orange-950/20 cursor-pointer border-b border-orange-50 dark:border-orange-800/30 last:border-b-0 transition-colors"
-                    onClick={() => {
-                      setQuery(suggestion.title);
-                      setSuggestions([]);
-                      handleSearch();
-                    }}
-                  >
-                    <div className="font-medium text-foreground">{suggestion.title}</div>
-                    {suggestion.authorsYear && (
-                      <div className="text-sm text-muted-foreground">{suggestion.authorsYear}</div>
-                    )}
-                  </div>
-                ))}
+            {suggestions && suggestions.length > 0 && query && !hasSearched && (
+              <div className="absolute z-[100] left-0 right-0 bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-md shadow-lg mt-1 overflow-hidden" style={{ maxWidth: 'min(100%, 600px)', margin: '0 auto' }}>
+                <div className="max-h-48 overflow-y-auto">
+                  {suggestions.slice(0, 4).map((suggestion, index) => (
+                    <div
+                      key={suggestion.paperId || suggestion.id}
+                      className={`px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-900 cursor-pointer transition-colors ${index !== suggestions.length - 1 && index !== 3 ? 'border-b border-gray-100 dark:border-gray-800' : ''}`}
+                      onClick={() => {
+                        setQuery(suggestion.title);
+                        setSuggestions([]);
+                        handleSearch();
+                      }}
+                    >
+                      <div className="flex items-center space-x-2">
+                        <div className="flex-shrink-0">
+                          <div className="w-4 h-4 bg-orange-100 dark:bg-orange-900/30 rounded flex items-center justify-center">
+                            <BookOpen className="w-2.5 h-2.5 text-orange-600 dark:text-orange-400" />
+                          </div>
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-xs font-medium text-gray-900 dark:text-gray-100 truncate leading-tight">
+                            {suggestion.title.length > 60 ? suggestion.title.substring(0, 60) + '...' : suggestion.title}
+                          </div>
+                          {suggestion.authorsYear && (
+                            <div className="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">
+                              {suggestion.authorsYear}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
 
@@ -637,7 +666,7 @@ const JournalSearchPage = () => {
               </div>
               <h3 className="text-xl font-semibold text-foreground mb-2">No papers found</h3>
               <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-                We couldn't find any papers matching your search. Try adjusting your search terms or filters.
+                We couldn&apos;t find any papers matching your search. Try adjusting your search terms or filters.
               </p>
               <div className="space-y-2">
                 <p className="text-sm text-muted-foreground font-medium">Try searching for:</p>
