@@ -348,37 +348,43 @@ const JournalSearchPage = () => {
 
             {/* Suggestions Dropdown */}
             {suggestions && suggestions.length > 0 && query && !hasSearched && (
-              <div className="absolute z-[100] w-full left-0 right-0 bg-popover border border-orange-200/50 dark:border-orange-800/50 rounded-lg shadow-lg mt-1 dark:bg-card max-h-96 overflow-y-auto">
-                {suggestions.map((suggestion) => (
-                  <div
-                    key={suggestion.paperId || suggestion.id}
-                    className="px-4 py-3 hover:bg-orange-50 dark:hover:bg-orange-950/20 cursor-pointer border-b border-orange-50 dark:border-orange-800/30 last:border-b-0 transition-colors group"
-                    onClick={() => {
-                      setQuery(suggestion.title);
-                      setSuggestions([]);
-                      handleSearch();
-                    }}
-                  >
-                    <div className="flex items-start space-x-3">
-                      <div className="flex-shrink-0 mt-0.5">
-                        <BookOpen className="w-4 h-4 text-orange-500 dark:text-orange-400 group-hover:text-orange-600 dark:group-hover:text-orange-300 transition-colors" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="font-medium text-foreground truncate leading-tight">
-                          {suggestion.title}
-                        </div>
-                        {suggestion.authorsYear && (
-                          <div className="text-sm text-muted-foreground mt-1 truncate">
-                            {suggestion.authorsYear}
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <ChevronRight className="w-4 h-4 text-orange-500 dark:text-orange-400" />
-                      </div>
+              <div className="absolute z-[100] w-full max-w-2xl mx-auto left-0 right-0 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl mt-1 overflow-hidden">
+                <div className="max-h-64 overflow-y-auto">
+                  <div className="py-1">
+                    <div className="px-3 py-2 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+                      <p className="text-xs font-medium text-gray-600 dark:text-gray-400">Suggestions</p>
                     </div>
+                    {suggestions.map((suggestion) => (
+                      <div
+                        key={suggestion.paperId || suggestion.id}
+                        className="px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors group"
+                        onClick={() => {
+                          setQuery(suggestion.title);
+                          setSuggestions([]);
+                          handleSearch();
+                        }}
+                      >
+                        <div className="flex items-center space-x-2">
+                          <div className="flex-shrink-0">
+                            <div className="w-6 h-6 bg-orange-100 dark:bg-orange-900/50 rounded-full flex items-center justify-center">
+                              <BookOpen className="w-3 h-3 text-orange-600 dark:text-orange-400" />
+                            </div>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
+                              {suggestion.title}
+                            </div>
+                            {suggestion.authorsYear && (
+                              <div className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                                {suggestion.authorsYear}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
               </div>
             )}
 
