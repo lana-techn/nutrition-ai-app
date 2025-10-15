@@ -348,7 +348,7 @@ const JournalSearchPage = () => {
 
             {/* Suggestions Dropdown */}
             {suggestions && suggestions.length > 0 && query && !hasSearched && (
-              <div className="absolute z-[100] w-full max-w-2xl mx-auto left-0 right-0 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl mt-1 overflow-hidden">
+              <div className="absolute z-[100] w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl mt-1 overflow-hidden">
                 <div className="max-h-64 overflow-y-auto">
                   <div className="py-1">
                     <div className="px-3 py-2 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
