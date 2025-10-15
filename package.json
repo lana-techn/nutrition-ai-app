@@ -11,7 +11,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "db:schema": "psql $DATABASE_URL -f database/schema.sql",
-    "db:seed": "psql $DATABASE_URL -f database/seed.sql"
+    "db:seed": "psql $DATABASE_URL -f database/seed.sql",
+    "db:migrate:clerk": "psql $DATABASE_URL -f database/clerk-migration.sql"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.33.3",

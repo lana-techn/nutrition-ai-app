@@ -5,10 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { HoveredLink, Menu, MenuItem, ProductItem } from "@/components/ui/navbar-menu";
 import { cn } from "@/lib/utils";
-import { UserButton, SignedIn, SignedOut, SignInButton, SignUpButton } from '@clerk/nextjs';
+import { UserButton, SignedIn, SignedOut, SignInButton, SignUpButton, useUser } from '@clerk/nextjs';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { Apple, MenuIcon, X, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { hasJournalSearchAccess } from '@/lib/access-control';
 
 export default function ModernNavbar() {
   return <Navbar className="top-2 sm:top-6" />;
@@ -18,8 +19,12 @@ function Navbar({ className }: { className?: string }) {
   const [active, setActive] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const { user } = useUser();
 
   const closeMobileMenu = () => setMobileMenuOpen(false);
+  
+  // Check if current user has access to journal search
+  const canAccessJournalSearch = hasJournalSearchAccess(user?.id);
 
   return (
     <>
@@ -72,15 +77,17 @@ function Navbar({ className }: { className?: string }) {
                       </div>
                     </div>
                   </HoveredLink>
-                  <HoveredLink href="/journal-search">
-                    <div className="flex items-center space-x-2">
-                      <span>🔍</span>
-                      <div>
-                        <div className="font-medium">Journal Search</div>
-                        <div className="text-xs text-muted-foreground">Search academic papers</div>
+                  {canAccessJournalSearch && (
+                    <HoveredLink href="/journal-search">
+                      <div className="flex items-center space-x-2">
+                        <span>🔍</span>
+                        <div>
+                          <div className="font-medium">Journal Search</div>
+                          <div className="text-xs text-muted-foreground">Search academic papers</div>
+                        </div>
                       </div>
-                    </div>
-                  </HoveredLink>
+                    </HoveredLink>
+                  )}
                 </div>
               </MenuItem>
               
@@ -288,17 +295,19 @@ function Navbar({ className }: { className?: string }) {
                       <div className="text-sm text-muted-foreground">Expert health tips</div>
                     </div>
                   </Link>
-                  <Link 
-                    href="/journal-search" 
-                    onClick={closeMobileMenu}
-                    className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent transition-colors"
-                  >
-                    <span className="text-2xl">🔍</span>
-                    <div>
-                      <div className="font-medium text-foreground">Journal Search</div>
-                      <div className="text-sm text-muted-foreground">Search academic papers</div>
-                    </div>
-                  </Link>
+                  {canAccessJournalSearch && (
+                    <Link 
+                      href="/journal-search" 
+                      onClick={closeMobileMenu}
+                      className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent transition-colors"
+                    >
+                      <span className="text-2xl">🔍</span>
+                      <div>
+                        <div className="font-medium text-foreground">Journal Search</div>
+                        <div className="text-sm text-muted-foreground">Search academic papers</div>
+                      </div>
+                    </Link>
+                  )}
                 </div>
 
                 {/* Dashboard Section */}

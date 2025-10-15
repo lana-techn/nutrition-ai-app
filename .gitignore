@@ -155,3 +155,4 @@ public/workbox-*
 
 # Sentry
 .sentryclirc
+.DS_Store

@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
 import { ReactQueryProvider } from '@/components/providers/ReactQueryProvider'
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
+import { UserSyncProvider } from '@/components/providers/UserSyncProvider'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,7 +39,9 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <ReactQueryProvider>
-              {children}
+              <UserSyncProvider>
+                {children}
+              </UserSyncProvider>
             </ReactQueryProvider>
           </ThemeProvider>
         </ClerkProvider>

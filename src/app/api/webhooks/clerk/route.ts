@@ -105,9 +105,11 @@ export async function POST(req: Request) {
         const { id } = data;
         
         // Delete user from database
-        await db.delete(users).where(eq(users.clerkId, id));
+        if (id) {
+          await db.delete(users).where(eq(users.clerkId, id));
+          console.log('User deleted from database:', id);
+        }
         
-        console.log('User deleted from database:', id);
         break;
       }
 
