@@ -44,6 +44,7 @@ const JournalSearchPage = () => {
   const [error, setError] = useState<string>('');
   const [suggestions, setSuggestions] = useState<SemanticScholarPaper[]>([]);
   const [showFilters, setShowFilters] = useState<boolean>(false);
+  const [hasSearched, setHasSearched] = useState<boolean>(false);
   const [lastSearchTime, setLastSearchTime] = useState<number>(0);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -80,6 +81,8 @@ const JournalSearchPage = () => {
 
     setLoading(true);
     setError('');
+    setHasSearched(true);
+    setSuggestions([]);
 
     try {
       const searchParams = new URLSearchParams();
@@ -145,7 +148,7 @@ const JournalSearchPage = () => {
   };
 
   const handleAutocomplete = async (value: string) => {
-    if (value.length < 2) {
+    if (value.length < 2 || hasSearched) {
       setSuggestions([]);
       return;
     }
@@ -160,6 +163,9 @@ const JournalSearchPage = () => {
           console.warn('Autocomplete API returned non-array:', suggestions);
           setSuggestions([]);
         }
+      } else if (response.status === 400 || response.status === 500) {
+        // Handle validation or API errors gracefully by clearing suggestions
+        setSuggestions([]);
       } else {
         console.error('Autocomplete API returned non-200 status:', response.status);
         setSuggestions([]);
@@ -195,6 +201,8 @@ const JournalSearchPage = () => {
 
   const handleQuickSearch = (term: string) => {
     setQuery(term);
+    setHasSearched(false); // Reset search state for quick search
+    setSuggestions([]); // Clear suggestions immediately
     setTimeout(() => handleSearch(), 100);
   };
 
@@ -296,7 +304,10 @@ const JournalSearchPage = () => {
                 ref={searchInputRef}
                 type="text"
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  setHasSearched(false); // Reset search state when user starts typing
+                }}
                 onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
                 placeholder="Search for research topics, authors, or keywords..."
                 className="w-full pl-12 pr-20 h-12 text-lg border-orange-200/50 focus:border-orange-500 focus:ring-orange-500 dark:bg-background dark:border-orange-800/50 dark:text-foreground dark:placeholder:text-muted-foreground"
@@ -333,7 +344,7 @@ const JournalSearchPage = () => {
             </div>
 
             {/* Suggestions Dropdown */}
-            {suggestions && suggestions.length > 0 && query && (
+            {suggestions && suggestions.length > 0 && query && !hasSearched && (
               <div className="absolute z-50 w-full bg-popover border border-orange-200/50 dark:border-orange-800/50 rounded-lg shadow-lg mt-1 dark:bg-card">
                 {suggestions.map((suggestion) => (
                   <div
@@ -637,7 +648,7 @@ const JournalSearchPage = () => {
               </div>
               <h3 className="text-xl font-semibold text-foreground mb-2">No papers found</h3>
               <p className="text-muted-foreground mb-6 max-w-md mx-auto">
-                We couldn't find any papers matching your search. Try adjusting your search terms or filters.
+                We couldn&apos;t find any papers matching your search. Try adjusting your search terms or filters.
               </p>
               <div className="space-y-2">
                 <p className="text-sm text-muted-foreground font-medium">Try searching for:</p>
