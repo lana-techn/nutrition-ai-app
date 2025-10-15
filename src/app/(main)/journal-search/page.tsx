@@ -348,42 +348,37 @@ const JournalSearchPage = () => {
 
             {/* Suggestions Dropdown */}
             {suggestions && suggestions.length > 0 && query && !hasSearched && (
-              <div className="absolute z-[100] inset-x-0 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl mt-1 overflow-hidden">
-                <div className="max-h-64 overflow-y-auto">
-                  <div className="py-1">
-                    <div className="px-3 py-2 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-                      <p className="text-xs font-medium text-gray-600 dark:text-gray-400">Suggestions</p>
-                    </div>
-                    {suggestions.map((suggestion) => (
-                      <div
-                        key={suggestion.paperId || suggestion.id}
-                        className="px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-800 cursor-pointer transition-colors group"
-                        onClick={() => {
-                          setQuery(suggestion.title);
-                          setSuggestions([]);
-                          handleSearch();
-                        }}
-                      >
-                        <div className="flex items-center space-x-2">
-                          <div className="flex-shrink-0">
-                            <div className="w-6 h-6 bg-orange-100 dark:bg-orange-900/50 rounded-full flex items-center justify-center">
-                              <BookOpen className="w-3 h-3 text-orange-600 dark:text-orange-400" />
-                            </div>
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
-                              {suggestion.title}
-                            </div>
-                            {suggestion.authorsYear && (
-                              <div className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                                {suggestion.authorsYear}
-                              </div>
-                            )}
+              <div className="absolute z-[100] left-0 right-0 bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-md shadow-lg mt-1 overflow-hidden" style={{ maxWidth: 'min(100%, 600px)', margin: '0 auto' }}>
+                <div className="max-h-48 overflow-y-auto">
+                  {suggestions.slice(0, 4).map((suggestion, index) => (
+                    <div
+                      key={suggestion.paperId || suggestion.id}
+                      className={`px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-900 cursor-pointer transition-colors ${index !== suggestions.length - 1 && index !== 3 ? 'border-b border-gray-100 dark:border-gray-800' : ''}`}
+                      onClick={() => {
+                        setQuery(suggestion.title);
+                        setSuggestions([]);
+                        handleSearch();
+                      }}
+                    >
+                      <div className="flex items-center space-x-2">
+                        <div className="flex-shrink-0">
+                          <div className="w-4 h-4 bg-orange-100 dark:bg-orange-900/30 rounded flex items-center justify-center">
+                            <BookOpen className="w-2.5 h-2.5 text-orange-600 dark:text-orange-400" />
                           </div>
                         </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-xs font-medium text-gray-900 dark:text-gray-100 truncate leading-tight">
+                            {suggestion.title.length > 60 ? suggestion.title.substring(0, 60) + '...' : suggestion.title}
+                          </div>
+                          {suggestion.authorsYear && (
+                            <div className="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">
+                              {suggestion.authorsYear}
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
