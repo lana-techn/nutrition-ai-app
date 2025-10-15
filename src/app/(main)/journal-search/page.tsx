@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useTheme } from 'next-themes';
+import { useUser } from '@clerk/nextjs';
+import { useRouter } from 'next/navigation';
 import { 
   Search, 
   BookOpen, 
@@ -22,7 +24,9 @@ import {
   ChevronRight,
   Shield,
   Sun,
-  Leaf
+  Leaf,
+  Lock,
+  AlertCircle
 } from 'lucide-react';
 import { SemanticScholarPaper, SemanticScholarSearchResponse } from '@/lib/semantic-scholar';
 import { Button } from '@/components/ui/button';
@@ -32,8 +36,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
+import { hasJournalSearchAccess } from '@/lib/access-control';
 
 const JournalSearchPage = () => {
+  const { isLoaded, isSignedIn, user } = useUser();
+  const router = useRouter();
   const { theme, systemTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [query, setQuery] = useState<string>('');
@@ -53,6 +60,7 @@ const JournalSearchPage = () => {
     publicationTypes: '',
     minCitations: '',
     openAccess: false,
+    language: '',
   });
 
   // Resolve current theme
@@ -110,6 +118,10 @@ const JournalSearchPage = () => {
       
       if (filters.openAccess) {
         searchParams.append('openAccessPdf', 'true');
+      }
+      
+      if (filters.language) {
+        searchParams.append('publicationLanguage', filters.language);
       }
 
       console.log('Making API call to:', `/api/semantic-scholar/search?${searchParams.toString()}`);
@@ -196,6 +208,7 @@ const JournalSearchPage = () => {
       publicationTypes: '',
       minCitations: '',
       openAccess: false,
+      language: '',
     });
   };
 
@@ -207,6 +220,86 @@ const JournalSearchPage = () => {
   };
 
   if (!mounted) return null;
+
+  // Check if user is loading
+  if (!isLoaded) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-background to-amber-50 dark:from-orange-950/20 dark:via-background dark:to-amber-950/20">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Check if user is signed in
+  if (!isSignedIn) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-background to-amber-50 dark:from-orange-950/20 dark:via-background dark:to-amber-950/20 p-8">
+        <Card className="max-w-md w-full">
+          <CardHeader>
+            <div className="w-16 h-16 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Lock className="w-8 h-8 text-orange-600 dark:text-orange-400" />
+            </div>
+            <CardTitle className="text-center text-2xl">Authentication Required</CardTitle>
+            <CardDescription className="text-center">
+              Please sign in to access the Journal Search feature
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button 
+              onClick={() => router.push('/sign-in')}
+              className="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white"
+            >
+              Sign In
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Check if user has access to this feature
+  if (!hasJournalSearchAccess(user.id)) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-50 via-background to-amber-50 dark:from-orange-950/20 dark:via-background dark:to-amber-950/20 p-8">
+        <Card className="max-w-md w-full border-orange-200/50 dark:border-orange-800/50 shadow-lg">
+          <CardHeader>
+            <div className="w-16 h-16 bg-gradient-to-br from-orange-100 to-amber-100 dark:from-orange-900/40 dark:to-amber-900/40 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
+              <Lock className="w-8 h-8 text-orange-600 dark:text-orange-400" />
+            </div>
+            <CardTitle className="text-center text-2xl text-foreground">Access Restricted</CardTitle>
+            <CardDescription className="text-center text-muted-foreground">
+              You don&apos;t have permission to access the Journal Search feature
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="p-4 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/30 dark:to-amber-950/30 rounded-lg border border-orange-200/50 dark:border-orange-800/50">
+              <div className="flex items-start space-x-3">
+                <AlertCircle className="w-5 h-5 text-orange-600 dark:text-orange-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm text-orange-900 dark:text-orange-200 mb-2 font-medium">
+                    This feature is currently in beta
+                  </p>
+                  <p className="text-xs text-orange-700 dark:text-orange-300/90">
+                    The Journal Search feature is available to selected users only. If you believe you should have access, please contact the administrator.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <Button 
+              onClick={() => router.push('/dashboard')}
+              className="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-md"
+            >
+              <ChevronRight className="w-4 h-4 mr-2 rotate-180" />
+              Back to Dashboard
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-background to-amber-50 dark:from-orange-950/20 dark:via-background dark:to-amber-950/20">
@@ -299,7 +392,7 @@ const JournalSearchPage = () => {
           </CardHeader>
           
           <CardContent>
-            <div className="relative mb-4">
+            <div className={cn("relative transition-all duration-200", suggestions && suggestions.length > 0 && query && !hasSearched ? "mb-[22rem]" : "mb-4")}>
               <div className="relative">
                 <Input
                   ref={searchInputRef}
@@ -344,44 +437,59 @@ const JournalSearchPage = () => {
                   </Button>
                 </div>
               </div>
-            </div>
 
-            {/* Suggestions Dropdown */}
-            {suggestions && suggestions.length > 0 && query && !hasSearched && (
-              <div className="absolute z-[100] left-0 right-0 bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-md shadow-lg mt-1 overflow-hidden" style={{ maxWidth: 'min(100%, 600px)', margin: '0 auto' }}>
-                <div className="max-h-48 overflow-y-auto">
-                  {suggestions.slice(0, 4).map((suggestion, index) => (
-                    <div
-                      key={suggestion.paperId || suggestion.id}
-                      className={`px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-900 cursor-pointer transition-colors ${index !== suggestions.length - 1 && index !== 3 ? 'border-b border-gray-100 dark:border-gray-800' : ''}`}
-                      onClick={() => {
-                        setQuery(suggestion.title);
-                        setSuggestions([]);
-                        handleSearch();
-                      }}
-                    >
-                      <div className="flex items-center space-x-2">
-                        <div className="flex-shrink-0">
-                          <div className="w-4 h-4 bg-orange-100 dark:bg-orange-900/30 rounded flex items-center justify-center">
-                            <BookOpen className="w-2.5 h-2.5 text-orange-600 dark:text-orange-400" />
-                          </div>
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-xs font-medium text-gray-900 dark:text-gray-100 truncate leading-tight">
-                            {suggestion.title.length > 60 ? suggestion.title.substring(0, 60) + '...' : suggestion.title}
-                          </div>
-                          {suggestion.authorsYear && (
-                            <div className="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">
-                              {suggestion.authorsYear}
-                            </div>
-                          )}
-                        </div>
-                      </div>
+              {/* Suggestions Dropdown - Improved UI/UX */}
+              {suggestions && suggestions.length > 0 && query && !hasSearched && (
+                <div className="absolute z-[100] left-0 right-0 mt-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="bg-white dark:bg-gray-900 border border-orange-200/50 dark:border-orange-800/50 rounded-lg shadow-xl overflow-hidden backdrop-blur-sm">
+                    <div className="px-3 py-2 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/30 dark:to-amber-950/30 border-b border-orange-200/50 dark:border-orange-800/50">
+                      <p className="text-xs font-medium text-orange-700 dark:text-orange-400 flex items-center">
+                        <Sparkles className="w-3 h-3 mr-1.5" />
+                        Suggested Papers
+                      </p>
                     </div>
-                  ))}
+                    <div className="max-h-80 overflow-y-auto">
+                      {suggestions.slice(0, 5).map((suggestion, index) => (
+                        <div
+                          key={suggestion.paperId || suggestion.id}
+                          className={cn(
+                            "px-4 py-3.5 hover:bg-gradient-to-r hover:from-orange-50 hover:to-amber-50 dark:hover:from-orange-950/20 dark:hover:to-amber-950/20 cursor-pointer transition-all duration-150 group",
+                            index !== suggestions.slice(0, 5).length - 1 && "border-b border-gray-100 dark:border-gray-800"
+                          )}
+                          onClick={() => {
+                            setQuery(suggestion.title);
+                            setSuggestions([]);
+                            handleSearch();
+                          }}
+                        >
+                          <div className="flex items-start space-x-3">
+                            <div className="flex-shrink-0 mt-0.5">
+                              <div className="w-8 h-8 bg-gradient-to-br from-orange-100 to-amber-100 dark:from-orange-900/40 dark:to-amber-900/40 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-150 shadow-sm">
+                                <BookOpen className="w-4 h-4 text-orange-600 dark:text-orange-400" />
+                              </div>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-sm font-medium text-gray-900 dark:text-gray-100 leading-snug mb-1 line-clamp-2 group-hover:text-orange-700 dark:group-hover:text-orange-300 transition-colors">
+                                {suggestion.title}
+                              </div>
+                              {suggestion.authorsYear && (
+                                <div className="flex items-center text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                  <Users className="w-3 h-3 mr-1" />
+                                  <span className="truncate">{suggestion.authorsYear}</span>
+                                </div>
+                              )}
+                            </div>
+                            <div className="flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+                              <ChevronRight className="w-4 h-4 text-orange-500 dark:text-orange-400" />
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
 
             {/* Filters Section */}
             {showFilters && (
@@ -401,7 +509,7 @@ const JournalSearchPage = () => {
                   </Button>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
                   <div>
                     <Label className="text-sm font-medium text-foreground mb-2">Publication Year</Label>
                     <select
@@ -430,6 +538,19 @@ const JournalSearchPage = () => {
                       <option value="ClinicalTrial">Clinical Trials</option>
                       <option value="MetaAnalysis">Meta Analysis</option>
                       <option value="Study">Studies</option>
+                    </select>
+                  </div>
+                  
+                  <div>
+                    <Label className="text-sm font-medium text-foreground mb-2">Language</Label>
+                    <select
+                      value={filters.language}
+                      onChange={(e) => setFilters(prev => ({ ...prev, language: e.target.value }))}
+                      className="w-full px-3 py-2 border border-orange-200/50 rounded-lg focus:ring-orange-500 focus:border-orange-500 bg-background dark:border-orange-800/50"
+                    >
+                      <option value="">All Languages</option>
+                      <option value="en">English</option>
+                      <option value="id">Indonesian</option>
                     </select>
                   </div>
                   
