@@ -279,10 +279,10 @@ const JournalSearchPage = () => {
               <div className="flex items-start space-x-3">
                 <AlertCircle className="w-5 h-5 text-orange-600 dark:text-orange-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <p className="text-sm text-orange-900 dark:text-orange-200 mb-2 font-medium">
+                  <p className="text-sm text-foreground mb-2 font-medium">
                     This feature is currently in beta
                   </p>
-                  <p className="text-xs text-orange-700 dark:text-orange-300/90">
+                  <p className="text-xs text-muted-foreground">
                     The Journal Search feature is available to selected users only. If you believe you should have access, please contact the administrator.
                   </p>
                 </div>
